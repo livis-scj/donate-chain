@@ -1,15 +1,11 @@
 <template>
-  <div id="app">
-    <router-view/>
+  <div>
+    捐赠
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'donate'
 }
 </script>
-
-<style>
-
-</style>
