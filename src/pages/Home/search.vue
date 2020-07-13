@@ -14,111 +14,48 @@
       <el-button v-if="!user || !user.userName" type="primary" @click="openDialog('signInForm')">{{buttonText}}</el-button>
     </el-header>
     <el-main>
-      <el-carousel :interval="4000" type="card">
-        <el-carousel-item v-for="(item, index) in carouselImage" :key="index">
-          <img :src="item.url" alt="item.title" width="800px" height="300px">
-          <h3 class="carousel-title">{{ item.title }}</h3>
-        </el-carousel-item>
-      </el-carousel>
       <div>
         <el-input v-model="input" placeholder="请输入内容"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
       </div>
-      <div>
-        <div class="infinite-list-wrapper" style="overflow:auto">
-          <div class="list-title">捐赠排名</div>
-          <ul
-            class="list"
-            v-infinite-scroll="load"
-            infinite-scroll-disabled="disabled">
-            <li v-for="(item, index) in donateRank" v-bind:key="index" class="list-item rank">
-              <span><span>{{index + 1}}</span>：{{item.name}}</span>
-              <span>{{item.value}}</span>
-            </li>
-            <li v-if="loading">加载中...</li>
-            <li v-if="noMore">没有更多了</li>
-          </ul>
-        </div>
-        <div class="infinite-list-wrapper" style="overflow:auto">
-          <div class="list-title">贫困群众</div>
-          <ul
-            class="list"
-            v-infinite-scroll="load"
-            infinite-scroll-disabled="disabled">
-            <li v-for="(item, index) in poorPeple" v-bind:key="index" class="list-item poor">
-              <span>{{item.name}}</span>
-              <span>{{item.region}}</span>
-            </li>
-            <li v-if="loading">加载中...</li>
-            <li v-if="noMore">没有更多了</li>
-          </ul>
-        </div>
-        <div class="infinite-list-wrapper" style="overflow:auto">
-          <div class="list-title">捐赠者</div>
-          <ul
-            class="list"
-            infinite-scroll-disabled="disabled">
-            <li v-for="(item, index) in donatePeple" v-bind:key="index" class="list-item donate">
-              <span>{{item.name}}</span>
-              <span>{{item.value}}</span>
-              <span>{{item.time}}</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <el-table
+        :data="tableData"
+        style="width: 100%"
+        :row-class-name="tableRowClassName">
+        <el-table-column
+          prop="date"
+          label="日期"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="姓名"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="type"
+          label="类型"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="idCode"
+          label="存证地址">
+        </el-table-column>
+        <el-table-column
+          width="60"
+          label="操作"
+          class-name="operate">
+          <i class="el-icon-message"></i>
+        </el-table-column>
+      </el-table>
       <div class="footer"><div class="m-report-foot page">京公网安备案11000002000001号 ©2020 Baidu <a href="https://www.baidu.com/duty" target="_blank">使用百度前必读</a></div></div>
     </el-main>
-    <el-dialog title="登 录" :visible.sync="dialogFormVisible" center width="428px" @close="closDialog('signInForm')" :close-on-click-modal="false">
-      <el-form :model="form" ref="signInForm" :rules="rules">
-        <el-form-item label="账 号" :label-width="formLabelWidth" required prop="userName">
-          <el-input v-model="form.userName" placeholder="请输入账号" autocomplete="on" clearable @input="clearError" @clear="clearError"></el-input>
-        </el-form-item>
-        <el-form-item label="密 码" :label-width="formLabelWidth" required prop="password">
-          <el-input placeholder="请输入密码" v-model="form.password" show-password clearable @input="clearError" @clear="clearError"></el-input>
-        </el-form-item>
-      </el-form>
-      <div>
-        <transition><span class="error-message">{{errMessage}}</span></transition>
-        <el-button type="text" class="forget-password">忘记密码</el-button>
-      </div>
-      <el-dialog
-        :close-on-click-modal="false"
-        width="428px"
-        center
-        title="注 册"
-        :visible.sync="innerVisible"
-        @close="closDialog('registerForm')"
-        append-to-body>
-        <el-form :model="registerForm" ref="registerForm" :rules="registerRules">
-          <el-form-item label="账 号" :label-width="formLabelWidth" required prop="userName">
-            <el-input v-model="registerForm.userName" placeholder="请输入账号" autocomplete="on" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="密 码" :label-width="formLabelWidth" required prop="password">
-            <el-input placeholder="请输入密码" v-model="registerForm.password" show-password clearable></el-input>
-          </el-form-item>
-          <el-form-item label="密 码" :label-width="formLabelWidth" required prop="repassword">
-            <el-input placeholder="请再次输入密码" v-model="registerForm.repassword" show-password clearable></el-input>
-          </el-form-item>
-          <el-form-item label="姓 名" :label-width="formLabelWidth" required prop="name">
-            <el-input placeholder="请输入姓名" v-model="registerForm.name" clearable></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="closDialog('registerForm')" size="medium">取 消</el-button>
-          <el-button type="primary" @click="signIn('registerForm')" :loading="buttonLoading" size="medium">提 交</el-button>
-        </div>
-      </el-dialog>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="innerVisible = true" size="medium">注 册</el-button>
-        <el-button type="primary" @click="signIn('signInForm')" :loading="buttonLoading" size="medium">登 录</el-button>
-      </div>
-    </el-dialog>
   </el-container>
 </template>
 
 <script>
-import {dataConfig, carouselImage, donateRank, poorPeple, donatePeple} from './data.js';
-import axios from '../http';
+import {} from '../data.js';
+import axios from '../../http';
 
 export default {
     data () {
@@ -129,13 +66,6 @@ export default {
             return callback();
         };
         return {
-            count: 10,
-            loading: false,
-            dataConfig,
-            carouselImage,
-            donateRank,
-            poorPeple,
-            donatePeple,
             dialogFormVisible: false,
             innerVisible: false,
             formLabelWidth: '60px',
@@ -188,29 +118,53 @@ export default {
                     { required: true, message: '姓名为必填', trigger: 'blur' },
                     { required: true, message: '姓名为必填', trigger: 'change' }
                 ]
-            }
+            },
+            tableData: [
+                {
+                    date: '2020-07-11',
+                    name: '王小虎',
+                    type: '捐赠',
+                    idCode: 'askjhfaskjlfhjasdhfjkahsfjashdjkf'
+                },
+                {
+                    date: '2020-07-12',
+                    name: '张东升',
+                    type: '受捐',
+                    idCode: 'asflkjadslkfjasdlkjflaksdfjasdlkf'
+                },
+                {
+                    date: '2020-07-13',
+                    name: '李霞',
+                    type: '受捐',
+                    idCode: 'jqwoiruqweirhawklfjkaewhfjkhwaekj'
+                },
+                {
+                    date: '2020-07-14',
+                    name: '钟琴',
+                    type: '捐赠',
+                    idCode: 'dasfnlasdnflkasdnflknasdlkfasdkls'
+                }
+            ]
         };
     },
     computed: {
-        noMore () {
-            return this.count >= 20;
-        },
-        disabled () {
-            return this.loading || this.noMore;
-        },
         buttonText () {
             console.log(this.user);
             console.log(this.user && this.user.name);
             return (this.user && this.user.userName) || '登录/注册';
         }
     },
+    mounted () {
+        console.log('attached');
+        console.log(this.$route.params.id);
+    },
     methods: {
-        load () {
-            this.loading = true;
-            setTimeout(() => {
-                this.count += 2;
-                this.loading = false;
-            }, 2000);
+        tableRowClassName({row, rowIndex}) {
+            if (row.type === '捐赠') {
+                return 'warning-row';
+            } else {
+                return 'success-row';
+            }
         },
         closDialog (formName) {
             if (formName === 'signInForm') {
@@ -294,7 +248,6 @@ export default {
         },
         search () {
             console.log('search');
-            this.$router.push({name: 'Search', params: {id: '1'}});
         }
     }
 };
@@ -333,59 +286,32 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    .el-carousel {
-      margin-bottom: 60px;
-      position: relative;
-      .el-carousel__item:nth-child(2n) {
-        background-color: #99a9bf;
-      }
-      .el-carousel__item:nth-child(2n+1) {
-        background-color: #d3dce6;
-      }
-      .el-carousel__item .carousel-title {
-        color: #fff;
-        font-size: 18px;
-        opacity: 0.75;
-        line-height: 1;
-        margin: 0;
-        position: absolute;
-        bottom: 10px;
-        left: 6px;
-      }
+    .el-table .warning-row {
+      background: oldlace;
+    }
+
+    .el-table .success-row {
+      background: #f0f9eb;
     }
     .el-input {
       display: inline-block;
       width: 60%;
       margin-right: 30px;
       margin-bottom: 60px;
+      margin-top: 60px;
     }
-    .infinite-list-wrapper {
-      display: inline-block;
-      width: calc(100% / 3 - 4px);
-      background-color: #fff;
-      .list-title {
-        margin-top: 16px;
-      }
-      .list {
-        list-style: none;
-        padding: 0;
-        overflow: auto;
-        height: 300px;
-        .list-item {
-          padding: 0 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 50px;
-          background: #e8f3fe;
-          margin: 10px;
-          color: #7dbcfc;
-          justify-content: space-between;
-        }
+    .operate {
+      text-align: center;
+      .el-icon-message {
+        cursor: pointer;
       }
     }
     .footer {
       margin-top: 10px;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       .m-report-foot {
         text-align: center;
         color: #999;

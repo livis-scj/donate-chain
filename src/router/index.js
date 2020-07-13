@@ -26,6 +26,11 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "Home" */ '@/pages/Home/activity.vue')
                 }
             ]
+        },
+        {
+            path: '/search',
+            name: 'Search',
+            component: () => import(/* webpackChunkName: "Home" */ '@/pages/Home/search.vue')
         }
     ]
 });
