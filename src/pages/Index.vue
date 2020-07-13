@@ -2,7 +2,16 @@
   <el-container>
     <el-header>
       <span class="header-title">扶贫捐赠信息追溯服务平台</span>
-      <el-button type="primary" @click="dialogFormVisible = true">登录/注册</el-button>
+      <el-popover
+        placement="bottom"
+        ref="popover"
+        trigger="hover"
+        popper-class="popper-sign-out"
+        v-if="user && user.userName">
+        <el-button type="info" plain @click="signOut()" class="sign-out-button">退出</el-button>
+        <el-button slot="reference" type="primary" @click="openDialog('signInForm')">{{buttonText}}</el-button>
+      </el-popover>
+      <el-button v-if="!user || !user.userName" type="primary" @click="openDialog('signInForm')">{{buttonText}}</el-button>
     </el-header>
     <el-main>
       <el-carousel :interval="4000" type="card">
@@ -48,10 +57,10 @@
       </div>
       <div class="footer"><div class="m-report-foot page">京公网安备案11000002000001号 ©2020 Baidu <a href="https://www.baidu.com/duty" target="_blank">使用百度前必读</a></div></div>
     </el-main>
-    <el-dialog title="登 录" :visible.sync="dialogFormVisible" center width="428px" @close="closSignInDialog()" :close-on-click-modal="false">
+    <el-dialog title="登 录" :visible.sync="dialogFormVisible" center width="428px" @close="closDialog('signInForm')" :close-on-click-modal="false">
       <el-form :model="form" ref="signInForm" :rules="rules">
-        <el-form-item label="账 号" :label-width="formLabelWidth" required prop="account">
-          <el-input v-model="form.account" placeholder="请输入账号" autocomplete="on" clearable @input="clearError" @clear="clearError"></el-input>
+        <el-form-item label="账 号" :label-width="formLabelWidth" required prop="userName">
+          <el-input v-model="form.userName" placeholder="请输入账号" autocomplete="on" clearable @input="clearError" @clear="clearError"></el-input>
         </el-form-item>
         <el-form-item label="密 码" :label-width="formLabelWidth" required prop="password">
           <el-input placeholder="请输入密码" v-model="form.password" show-password clearable @input="clearError" @clear="clearError"></el-input>
@@ -67,10 +76,11 @@
         center
         title="注 册"
         :visible.sync="innerVisible"
+        @close="closDialog('registerForm')"
         append-to-body>
         <el-form :model="registerForm" ref="registerForm" :rules="registerRules">
-          <el-form-item label="账 号" :label-width="formLabelWidth" required prop="account">
-            <el-input v-model="registerForm.account" placeholder="请输入账号" autocomplete="on" clearable></el-input>
+          <el-form-item label="账 号" :label-width="formLabelWidth" required prop="userName">
+            <el-input v-model="registerForm.userName" placeholder="请输入账号" autocomplete="on" clearable></el-input>
           </el-form-item>
           <el-form-item label="密 码" :label-width="formLabelWidth" required prop="password">
             <el-input placeholder="请输入密码" v-model="registerForm.password" show-password clearable></el-input>
@@ -78,12 +88,12 @@
           <el-form-item label="密 码" :label-width="formLabelWidth" required prop="repassword">
             <el-input placeholder="请再次输入密码" v-model="registerForm.repassword" show-password clearable></el-input>
           </el-form-item>
-          <el-form-item label="姓 名" :label-width="formLabelWidth" required prop="userName">
-            <el-input placeholder="请输入姓名" v-model="registerForm.userName" clearable></el-input>
+          <el-form-item label="姓 名" :label-width="formLabelWidth" required prop="name">
+            <el-input placeholder="请输入姓名" v-model="registerForm.name" clearable></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="innerVisible = false" size="medium">取 消</el-button>
+          <el-button @click="closDialog('registerForm')" size="medium">取 消</el-button>
           <el-button type="primary" @click="signIn('registerForm')" :loading="buttonLoading" size="medium">提 交</el-button>
         </div>
       </el-dialog>
@@ -97,7 +107,7 @@
 
 <script>
 import {dataConfig} from './data.js';
-// import axios from '../http';
+import axios from '../http';
 
 export default {
     data () {
@@ -115,45 +125,51 @@ export default {
             innerVisible: false,
             formLabelWidth: '60px',
             form: {
-                account: '',
+                userName: '',
                 password: ''
             },
             user: null,
             buttonLoading: false,
             input: '',
             errMessage: '',
+            popoverVisible: false,
             rules: {
-                account: [
+                userName: [
                     { required: true, message: '账号为必填', trigger: 'blur' },
+                    { min: 3, max: 16, message: '账号长度在 3 到 16 个字符', trigger: 'blur' },
                     { required: true, message: '账号为必填', trigger: 'change' }
                 ],
                 password: [
                     { required: true, message: '密码为必填', trigger: 'blur' },
+                    { min: 3, max: 16, message: '密码长度在 3 到 16 个字符', trigger: 'blur' },
                     { required: true, message: '密码为必填', trigger: 'blur' },
                     { required: true, message: '密码为必填', trigger: 'change' }
                 ]
             },
             registerForm: {
-                account: '1',
-                password: '1',
-                repassword: '1',
-                userName: '1'
+                userName: '',
+                password: '',
+                repassword: '',
+                name: ''
             },
             registerRules: {
-                account: [
+                userName: [
                     { required: true, message: '账号为必填', trigger: 'blur' },
+                    { min: 3, max: 16, message: '账号长度在 3 到 16 个字符', trigger: 'blur' },
                     { required: true, message: '账号为必填', trigger: 'change' }
                 ],
                 password: [
+                    { min: 3, max: 16, message: '密码长度在 3 到 16 个字符', trigger: 'blur' },
                     { required: true, message: '密码为必填', trigger: 'blur' },
                     { required: true, message: '密码为必填', trigger: 'change' }
                 ],
                 repassword: [
+                    { min: 3, max: 16, message: '密码长度在 3 到 16 个字符', trigger: 'blur' },
                     { required: true, message: '密码为必填', trigger: 'blur' },
                     { required: true, message: '两次输入密码必须相同', validator: checkRepassword, trigger: 'blur' },
                     { required: true, message: '密码为必填', trigger: 'change' }
                 ],
-                userName: [
+                name: [
                     { required: true, message: '姓名为必填', trigger: 'blur' },
                     { required: true, message: '姓名为必填', trigger: 'change' }
                 ]
@@ -166,6 +182,11 @@ export default {
         },
         disabled () {
             return this.loading || this.noMore;
+        },
+        buttonText () {
+            console.log(this.user);
+            console.log(this.user && this.user.name);
+            return (this.user && this.user.userName) || '登录/注册';
         }
     },
     methods: {
@@ -176,11 +197,39 @@ export default {
                 this.loading = false;
             }, 2000);
         },
-        closSignInDialog () {
-            this.form = {
-                account: '',
-                password: ''
-            };
+        closDialog (formName) {
+            if (formName === 'signInForm') {
+                this.dialogFormVisible = false;
+                this.form = {
+                    userName: '',
+                    password: ''
+                };
+            } else if (formName === 'registerForm') {
+                this.innerVisible = false;
+                this.registerForm = {
+                    userName: '',
+                    password: '',
+                    repassword: '',
+                    name: ''
+                };
+            }
+        },
+        openDialog(formName) {
+            console.log(formName);
+            console.log(this.user);
+            console.log(this.user && this.user.userName);
+            if (formName === 'signInForm') {
+                if (this.user && this.user.userName) {
+                    this.popoverVisible = !this.popoverVisible;
+                } else {
+                    this.dialogFormVisible = true;
+                }
+            } else if (formName === 'registerForm') {
+                this.innerVisible = true;
+            }
+        },
+        signOut () {
+            this.user = null;
         },
         signIn (formName) {
             console.log('signIn');
@@ -191,31 +240,34 @@ export default {
                 console.log(valid);
                 if (valid) {
                     console.log(formName);
-                    if (formName === 'form') {
-                        const account = this.form.account;
+                    if (formName === 'signInForm') {
+                        const userName = this.form.userName;
                         const password = this.form.password;
                         this.dataConfig.forEach(item => {
-                            if (item.account === account && item.password === password) {
+                            if (item.userName === userName && item.password === password) {
                                 this.user = item;
+                                this.closDialog('signInForm');
                             }
                         });
                         if (!this.user) {
                             this.errMessage = '账号/密码错误';
                         }
                     } else if (formName === 'registerForm') {
-                        let formData = new FormData();
-                        formData.userName = this.registerForm.account;
-                        formData.password = this.registerForm.password;
-                        formData.name = this.registerForm.userName;
-                        console.log(formData);
-                        // axios.post('/api/donate/submit', formData).then(res => {
-                        //     if (+res.status === 0) {
-                        //         this.$message({
-                        //             message: '注册成功',
-                        //             type: 'success'
-                        //         });
-                        //     }
-                        // });
+                        console.log({...this.registerForm});
+                        axios.post('/api/donor/register', {...this.registerForm}).then(res => {
+                            if (+res.status === 0) {
+                                this.closDialog('registerForm');
+                                this.$message({
+                                    message: '注册成功',
+                                    type: 'success'
+                                });
+                            } else {
+                                this.$message({
+                                    message: res.msg,
+                                    type: 'error'
+                                });
+                            }
+                        });
                     }
                 } else {
                     return false;
@@ -248,6 +300,7 @@ export default {
       position: absolute;
       right: 22px;
       top: 50%;
+      width: 102px;
       transform: translateY(-50%);
     }
   }
@@ -335,6 +388,16 @@ export default {
           margin-left: 20px;
         }
       }
+    }
+  }
+  .popper-sign-out {
+    width: 120px;
+    min-width: 120px;
+    .sign-out-button {
+      position: relative;
+      left: 50%;
+      width: 100px;
+      transform: translateX(-50%);
     }
   }
 </style>
