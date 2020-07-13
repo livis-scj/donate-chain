@@ -19,6 +19,11 @@ export default new Router({
                     path: '/home/donate',
                     name: 'donate',
                     component: () => import(/* webpackChunkName: "Home" */ '@/pages/Home/donate.vue')
+                },
+                {
+                    path: '/home/activity',
+                    name: 'activity',
+                    component: () => import(/* webpackChunkName: "Home" */ '@/pages/Home/activity.vue')
                 }
             ]
         }

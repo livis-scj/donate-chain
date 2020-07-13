@@ -1,25 +1,6 @@
 <template>
     <div>
 <el-container>
-  <el-aside width="200px">
-    <el-menu>
-      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">主页</span>
-      </el-menu-item>
-      <el-submenu index="1">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>捐赠</span>
-        </template>
-        <el-menu-item index="2">
-          <i class="el-icon-menu"></i>
-          <span slot="title">新建捐赠</span>
-        </el-menu-item>
-      </el-submenu>
-    </el-menu>
-  </el-aside>
-
   <el-container>
     <el-header style="text-align: right; font-size: 12px">
       <el-dropdown>
