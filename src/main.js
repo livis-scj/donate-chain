@@ -6,7 +6,9 @@ import router from './router';
 import ElementUI from 'element-ui';
 import axios from './http';
 import 'element-ui/lib/theme-chalk/index.css';
+import VueCookies from 'vue-cookies';
 
+Vue.use(VueCookies);
 Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
 

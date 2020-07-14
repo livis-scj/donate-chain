@@ -5,21 +5,6 @@ import tangRongBin from '../assets/tang-rong-bin.jpg';
 import farming from '../assets/farming.jpg';
 import beiyitong from '../assets/beiyitong.jpg';
 import fruitPlanting from '../assets/fruit-plating.jpg';
-export const dataConfig = [
-    {
-        account: 'livis',
-        password: '123456',
-        userName: 'livis',
-        userId: '88f64156-086f-4c0c-9a87-089c3b12948b'
-    },
-    {
-        account: 'nocky',
-        password: '123456',
-        userName: 'nocky',
-        userId: 'c11f7b2a-428d-45f2-8b52-1b452a141ada'
-    }
-];
-
 export const carouselImage = [
     {
         title: '“最美岱夏红”党建联盟的“五乡”人才服务队义务为联盟内村民技术指导',
@@ -272,3 +257,5 @@ export const poorPeple = [
         region: '西藏 拉萨'
     }
 ];
+
+export const SETTIMEOUTTIME = 60 * 1000;

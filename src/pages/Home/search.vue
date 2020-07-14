@@ -2,16 +2,7 @@
   <el-container>
     <el-header>
       <span class="header-title">扶贫捐赠信息追溯服务平台</span>
-      <el-popover
-        placement="bottom"
-        ref="popover"
-        trigger="hover"
-        popper-class="popper-sign-out"
-        v-if="user && user.userName">
-        <el-button type="info" plain @click="signOut()" class="sign-out-button">退出</el-button>
-        <el-button slot="reference" type="primary" @click="openDialog('signInForm')">{{buttonText}}</el-button>
-      </el-popover>
-      <el-button v-if="!user || !user.userName" type="primary" @click="openDialog('signInForm')">{{buttonText}}</el-button>
+      <v-sign-in-button></v-sign-in-button>
     </el-header>
     <el-main>
       <div>
@@ -23,142 +14,122 @@
         style="width: 100%"
         :row-class-name="tableRowClassName">
         <el-table-column
-          prop="date"
-          label="日期"
-          width="180">
+          type="index"
+          label="序号"
+          width="60">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="donateTime"
+          label="日期"
+          width="180">
+          <template slot-scope="scope">
+            <span>{{scope.donateTime | tiemFormat}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="donorName"
           label="姓名"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="type"
+          prop="participation"
           label="类型"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="idCode"
+          label="物品">
+          <template slot-scope="scope1">
+            <span>{{scope1.row.name}} {{scope1.row.type}} {{scope1.row.unit}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="certCode"
           label="存证地址">
         </el-table-column>
         <el-table-column
           width="60"
           label="操作"
           class-name="operate">
-          <i class="el-icon-message"></i>
+          <template slot-scope="scope">
+            <span @click="openDrawer(scope.row)"><i class="el-icon-message"></i></span>
+          </template>
         </el-table-column>
       </el-table>
-      <div class="footer"><div class="m-report-foot page">京公网安备案11000002000001号 ©2020 Baidu <a href="https://www.baidu.com/duty" target="_blank">使用百度前必读</a></div></div>
+      <div class="footer"><div class="m-report-foot page">京公网安备案11000002300011号 ©2020 TianYan <a href="" target="_blank">使用天眼追溯系统前必读</a></div></div>
     </el-main>
+    <el-drawer
+      title="详情"
+      :visible.sync="drawer"
+      direction="rtl"
+      :before-close="handleClose">
+      <span>{{code}}</span>
+    </el-drawer>
   </el-container>
 </template>
 
 <script>
 import {} from '../data.js';
 import axios from '../../http';
+import moment from 'moment';
+import SignInButton from '../../components/SignInButton.vue';
 
 export default {
     data () {
-        let checkRepassword = (rule, value, callback) => {
-            if (value !== this.registerForm.password) {
-                return callback(new Error('两次输入密码必须相同'));
-            }
-            return callback();
-        };
         return {
-            dialogFormVisible: false,
-            innerVisible: false,
-            formLabelWidth: '60px',
-            form: {
-                userName: '',
-                password: ''
-            },
-            user: null,
-            buttonLoading: false,
             input: '',
-            errMessage: '',
-            popoverVisible: false,
-            rules: {
-                userName: [
-                    { required: true, message: '账号为必填', trigger: 'blur' },
-                    { min: 3, max: 16, message: '账号长度在 3 到 16 个字符', trigger: 'blur' },
-                    { required: true, message: '账号为必填', trigger: 'change' }
-                ],
-                password: [
-                    { required: true, message: '密码为必填', trigger: 'blur' },
-                    { min: 3, max: 16, message: '密码长度在 3 到 16 个字符', trigger: 'blur' },
-                    { required: true, message: '密码为必填', trigger: 'blur' },
-                    { required: true, message: '密码为必填', trigger: 'change' }
-                ]
-            },
-            registerForm: {
-                userName: '',
-                password: '',
-                repassword: '',
-                name: ''
-            },
-            registerRules: {
-                userName: [
-                    { required: true, message: '账号为必填', trigger: 'blur' },
-                    { min: 3, max: 16, message: '账号长度在 3 到 16 个字符', trigger: 'blur' },
-                    { required: true, message: '账号为必填', trigger: 'change' }
-                ],
-                password: [
-                    { min: 3, max: 16, message: '密码长度在 3 到 16 个字符', trigger: 'blur' },
-                    { required: true, message: '密码为必填', trigger: 'blur' },
-                    { required: true, message: '密码为必填', trigger: 'change' }
-                ],
-                repassword: [
-                    { min: 3, max: 16, message: '密码长度在 3 到 16 个字符', trigger: 'blur' },
-                    { required: true, message: '密码为必填', trigger: 'blur' },
-                    { required: true, message: '两次输入密码必须相同', validator: checkRepassword, trigger: 'blur' },
-                    { required: true, message: '密码为必填', trigger: 'change' }
-                ],
-                name: [
-                    { required: true, message: '姓名为必填', trigger: 'blur' },
-                    { required: true, message: '姓名为必填', trigger: 'change' }
-                ]
-            },
-            tableData: [
-                {
-                    date: '2020-07-11',
-                    name: '王小虎',
-                    type: '捐赠',
-                    idCode: 'askjhfaskjlfhjasdhfjkahsfjashdjkf'
-                },
-                {
-                    date: '2020-07-12',
-                    name: '张东升',
-                    type: '受捐',
-                    idCode: 'asflkjadslkfjasdlkjflaksdfjasdlkf'
-                },
-                {
-                    date: '2020-07-13',
-                    name: '李霞',
-                    type: '受捐',
-                    idCode: 'jqwoiruqweirhawklfjkaewhfjkhwaekj'
-                },
-                {
-                    date: '2020-07-14',
-                    name: '钟琴',
-                    type: '捐赠',
-                    idCode: 'dasfnlasdnflkasdnflknasdlkfasdkls'
-                }
-            ]
+            drawer: false,
+            code: '',
+            tableData: null
         };
     },
-    computed: {
-        buttonText () {
-            console.log(this.user);
-            console.log(this.user && this.user.name);
-            return (this.user && this.user.userName) || '登录/注册';
-        }
+    computed: {},
+    components: {
+        'v-sign-in-button': SignInButton
     },
     mounted () {
-        console.log('attached');
-        console.log(this.$route.params.id);
+        const query = this.$route.params.query;
+        this.input = query;
+        if (query) {
+            this.searchForList(query);
+        }
+    },
+    filters: {
+        tiemFormat (value) {
+            return moment(value).format('YY-MM-DD hh:mm:ss');
+        }
     },
     methods: {
+        getToken() {
+            const cookieToken = this.$cookies.get('token');
+            let account = '';
+            let token = '';
+            if (cookieToken) {
+                const accountToken = cookieToken.split(' ');
+                account = accountToken[0];
+                token = accountToken[1];
+            }
+            return {account, token};
+        },
+        searchForList(query) {
+            axios.get(`/api/donate/genericSearch?query=${query}`, {
+                headers: {
+                    'X-token': JSON.stringify(this.getToken().token)
+                }
+            }).then(res => {
+                this.tableData = res.data;
+            });
+        },
+        openDrawer(row) {
+            this.code = row;
+            this.drawer = true;
+        },
+        handleClose(done) {
+            this.$confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                })
+                .catch(_ => {});
+        },
         tableRowClassName({row, rowIndex}) {
             if (row.type === '捐赠') {
                 return 'warning-row';
@@ -166,88 +137,8 @@ export default {
                 return 'success-row';
             }
         },
-        closDialog (formName) {
-            if (formName === 'signInForm') {
-                this.dialogFormVisible = false;
-                this.form = {
-                    userName: '',
-                    password: ''
-                };
-            } else if (formName === 'registerForm') {
-                this.innerVisible = false;
-                this.registerForm = {
-                    userName: '',
-                    password: '',
-                    repassword: '',
-                    name: ''
-                };
-            }
-        },
-        openDialog(formName) {
-            console.log(formName);
-            console.log(this.user);
-            console.log(this.user && this.user.userName);
-            if (formName === 'signInForm') {
-                if (this.user && this.user.userName) {
-                    this.popoverVisible = !this.popoverVisible;
-                } else {
-                    this.dialogFormVisible = true;
-                }
-            } else if (formName === 'registerForm') {
-                this.innerVisible = true;
-            }
-        },
-        signOut () {
-            this.user = null;
-        },
-        signIn (formName) {
-            console.log('signIn');
-            console.log(formName);
-            this.buttonLoading = true;
-            this.$refs[formName].validate((valid) => {
-                this.buttonLoading = false;
-                console.log(valid);
-                if (valid) {
-                    console.log(formName);
-                    if (formName === 'signInForm') {
-                        const userName = this.form.userName;
-                        const password = this.form.password;
-                        this.dataConfig.forEach(item => {
-                            if (item.userName === userName && item.password === password) {
-                                this.user = item;
-                                this.closDialog('signInForm');
-                            }
-                        });
-                        if (!this.user) {
-                            this.errMessage = '账号/密码错误';
-                        }
-                    } else if (formName === 'registerForm') {
-                        console.log({...this.registerForm});
-                        axios.post('/api/donor/register', {...this.registerForm}).then(res => {
-                            if (+res.status === 0) {
-                                this.closDialog('registerForm');
-                                this.$message({
-                                    message: '注册成功',
-                                    type: 'success'
-                                });
-                            } else {
-                                this.$message({
-                                    message: res.msg,
-                                    type: 'error'
-                                });
-                            }
-                        });
-                    }
-                } else {
-                    return false;
-                }
-            });
-        },
-        clearError () {
-            this.errMessage = '';
-        },
         search () {
-            console.log('search');
+            this.searchForList(this.input);
         }
     }
 };
@@ -267,13 +158,6 @@ export default {
       padding-right: 124px;
       font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
       font-size: 20px;
-    }
-    button {
-      position: absolute;
-      right: 22px;
-      top: 50%;
-      width: 102px;
-      transform: translateY(-50%);
     }
   }
   .el-main {
@@ -320,38 +204,6 @@ export default {
             color: #999;
         }
       }
-    }
-  }
-  .el-dialog__wrapper {
-    .el-dialog__body {
-      padding-bottom: 10px;
-      .error-message {
-        color: #fc4343;
-        margin-left: 60px;
-      }
-      .forget-password {
-        padding: 0;
-        position: absolute;
-        right: 25px;
-      }
-    }
-    .dialog-footer {
-      button {
-        width: 100px;
-        &:nth-child(2) {
-          margin-left: 20px;
-        }
-      }
-    }
-  }
-  .popper-sign-out {
-    width: 120px;
-    min-width: 120px;
-    .sign-out-button {
-      position: relative;
-      left: 50%;
-      width: 100px;
-      transform: translateX(-50%);
     }
   }
 </style>
