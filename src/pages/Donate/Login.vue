@@ -3,7 +3,7 @@
         <div class="container">
             <div class="top">
                 <div class="header">
-                    扶贫捐助管理平台
+                    扶贫捐助信息平台
                 </div>
                 <div class="desc">打造基于区块链的扶贫溯源信息服务平台，助力扶贫等公益事业更好地传输，为国家和政府降本增效</div>
             </div>
@@ -11,8 +11,8 @@
                 <el-form ref="form" :model="form" :rules="rules">
                     <el-tabs v-model="activeName">
                         <el-tab-pane label="用户登录" name="user">
-                            <el-form-item prop="username" required>
-                                <el-input  prefix-icon="el-icon-user" v-model="form.username" placeholder="请输入用户名"></el-input>
+                            <el-form-item prop="userName" required>
+                                <el-input  prefix-icon="el-icon-user" v-model="form.userName" placeholder="请输入用户名"></el-input>
                             </el-form-item>
                             <el-form-item prop="password" required>
                                 <el-input @keyup.enter.native="handleLogin"  prefix-icon="el-icon-lock" show-password v-model="form.password" placeholder="请输入密码"></el-input>
@@ -34,8 +34,8 @@
                             </el-form-item>
                         </el-tab-pane>
                         <el-tab-pane label="管理员登录" name="admin">
-                            <el-form-item prop="username" required>
-                                <el-input  prefix-icon="el-icon-user" v-model="form.username" placeholder="请输入用户名"></el-input>
+                            <el-form-item prop="userName" required>
+                                <el-input  prefix-icon="el-icon-user" v-model="form.userName" placeholder="请输入用户名"></el-input>
                             </el-form-item>
                             <el-form-item prop="password" required>
                                 <el-input @keyup.enter.native="handleLogin" prefix-icon="el-icon-lock" show-password v-model="form.password" placeholder="请输入密码"></el-input>
@@ -70,9 +70,9 @@ export default {
             loading: false,
             activeName: 'user',
             rules: {
-                username: {required: true, message: '请输入用户名', trigger: 'blur'},
+                userName: {required: true, message: '请输入用户名', trigger: 'blur'},
                 password: {required: true, message: '请输入密码', trigger: 'blur'},
-                mobile: {required: true, message: '请输入密码', trigger: 'blur'}
+                mobile: {required: true, message: '请输入手机号', trigger: 'blur'}
             }
         };
     },

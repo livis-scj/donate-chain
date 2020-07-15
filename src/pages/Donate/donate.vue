@@ -1,31 +1,63 @@
 <template>
   <div>
-      <div class="header"></div>
-      <el-button type="primary" @click="handleAdd">新建捐赠</el-button>
-      <el-table :data="donateData" style="margin-top:20px">
-          <el-table-column
-              v-for="(item,index) in columns"
-              :key="index"
-              :prop="item.value"
-              :label="item.text"
-              :formatter="item.formatter"
-              :min-width="item.width">
-          </el-table-column>
-          <el-table-column label="操作">
-              <el-button type="text">查看详情</el-button>
-          </el-table-column>
-      </el-table>
-      <el-pagination
-          style="margin-top: 30px; text-align:right"
-          v-if="total > 0"
-          background
-          layout="total, prev, pager, next"
-          @current-change="handleCurrentChange"
-          :page-size="pageSize"
-          :total="total">
-      </el-pagination>
+      <section class="search" v-if="$store.getters.loginId === 9900000">
+          <el-form ref="searchForm" :model="searchForm" label-width="80px">
+              <el-row>
+                  <el-col :span="16">
+                      <el-form-item label="捐赠人">
+                          <el-select style="width:100%" v-model="searchForm.donorId" placeholder="请选择捐赠人">
+                              <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                              </el-option>
+                          </el-select>
+                      </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                      <el-form-item>
+                          <el-button type="primary" @click="search">查询</el-button>
+                          <el-button @click="reset">重置</el-button>
+                      </el-form-item>
+                  </el-col>
+              </el-row>
+          </el-form>
+      </section>
+      <section class="table">
+          <div style="display:flex;justify-content: space-between;">
+              <span style="line-height:40px;font-size:20px">捐赠详情</span>
+              <el-button type="primary" @click="handleAdd">新建捐赠</el-button>
+          </div>
+          <el-table border :data="donateData" style="margin-top:20px;text-align:center">
+              <el-table-column
+                  v-for="(item,index) in columns"
+                  :key="index"
+                  :prop="item.value"
+                  :label="item.text"
+                  align="center"
+                  :formatter="item.formatter"
+                  :min-width="item.width">
+              </el-table-column>
+              <el-table-column label="操作">
+                  <template slot-scope="scope">
+                      <el-button type="text" @click="handleDetail(scope.row)">查看详情</el-button>
+                  </template>
+              </el-table-column>
+          </el-table>
+          <el-pagination
+              style="margin-top: 30px; text-align:right"
+              v-if="total > 0"
+              background
+              layout="total, prev, pager, next"
+              @current-change="handleCurrentChange"
+              :page-size="pageSize"
+              :total="total">
+          </el-pagination>
+      </section>
       <el-dialog
           title="新建捐赠"
+          top="10vh"
           :visible.sync="donateDialogVisible">
           <el-form ref="form" :rules="rules" :model="form" label-width="100px" label-position="right">
               <el-form-item prop="isAnonymous" label="是否匿名">
@@ -34,7 +66,7 @@
                       <el-radio label="0">匿名</el-radio>
                   </el-radio-group>
               </el-form-item>
-              <el-form-item label="捐赠人id" prop="donorId" required v-if="$store.getters.loginId === 9900000">
+              <el-form-item label="捐赠人" prop="donorId" required v-if="$store.getters.loginId === 9900000">
                   <el-select style="width:100%" v-model="form.donorId" placeholder="请选择捐赠人">
                       <el-option
                         v-for="item in options"
@@ -87,7 +119,7 @@
 </template>
 
 <script>
-import {getDonations, submitDonate, getAllDonators} from '@/API';
+import {getDonations, submitDonate, getAllDonators, getDonateTrace} from '@/API';
 import {timerFormat} from '@/utils';
 
 export default {
@@ -100,6 +132,9 @@ export default {
                 type: '1',
                 unit: '元',
                 quantity: ''
+            },
+            searchForm: {
+
             },
             options: [],
             columns: [
@@ -162,6 +197,22 @@ export default {
                 this.$message.error(msg);
             }
         },
+        async search() {
+            const {status, data, msg} = await getDonations({
+                pageNo: this.pageNo,
+                pageSize: this.pageSize,
+                donorId: this.searchForm.donorId
+            });
+            if (status === 0) {
+                this.donateData = data.dataList;
+                this.total = data.total;
+            } else {
+                this.$message.error(msg);
+            }
+        },
+        reset() {
+            this.getDonateData();
+        },
         async getDonatorData() {
             const {data} = await getAllDonators();
             this.options = data;
@@ -209,12 +260,22 @@ export default {
                 }
                 this.loading = false;
             });
+        },
+        async handleDetail(item) {
+            const {data} = await getDonateTrace({certCode: item.certCode});
+            console.log(data);
         }
     }
 };
 </script>
 
 <style lang="stylus" scoped>
+section
+    background #FFF
+    padding 24px
+.search
+    margin-bottom 16px
+    padding-bottom 8px
 .el-dialog__wrapper
     .donate
         width 1000px
