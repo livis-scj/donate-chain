@@ -11,14 +11,19 @@ export default new Router({
             component: () => import(/* webpackChunkName: "Home" */ '@/pages/Index.vue')
         },
         {
-            path: '/home',
+            path: '/donate/login',
+            name: 'list',
+            component: () => import(/* webpackChunkName: "Home" */ '@/pages/Donate/Login.vue')
+        },
+        {
+            path: '/donate',
             name: 'Home',
             component: () => import(/* webpackChunkName: "Home" */ '@/Layouts'),
             children: [
                 {
-                    path: '/home/donate',
+                    path: '/donate/list',
                     name: 'donate',
-                    component: () => import(/* webpackChunkName: "Home" */ '@/pages/Home/donate.vue')
+                    component: () => import(/* webpackChunkName: "Home" */ '@/pages/Donate/donate.vue')
                 },
                 {
                     path: '/home/activity',

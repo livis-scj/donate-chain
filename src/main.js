@@ -5,6 +5,7 @@ import App from './App';
 import router from './router';
 import ElementUI from 'element-ui';
 import axios from './http';
+import store from './vuex';
 import 'element-ui/lib/theme-chalk/index.css';
 import VueCookies from 'vue-cookies';
 
@@ -17,6 +18,7 @@ Vue.use(ElementUI);
 new Vue({
     el: '#app',
     router,
+    store,
     components: {App},
     template: '<App/>'
 });
