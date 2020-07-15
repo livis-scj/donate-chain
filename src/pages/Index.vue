@@ -13,7 +13,7 @@
       </el-carousel>
       <div>
         <el-input v-model="input" placeholder="请输入内容"></el-input>
-        <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+        <el-button type="primary" class="search-icon" icon="el-icon-search" @click="search">搜索</el-button>
       </div>
       <div>
         <div class="infinite-list-wrapper" style="overflow:auto">
@@ -57,7 +57,7 @@
           </ul>
         </div>
       </div>
-      <div class="footer"><div class="m-report-foot page">京公网安备案11000002000001号 ©2020 Baidu <a href="https://www.baidu.com/duty" target="_blank">使用百度前必读</a></div></div>
+      <div class="footer"><div class="m-report-foot page">京公网安备案11000002000001号 ©2020 TianYan <a href="#" target="_blank">使用天眼前必读</a></div></div>
     </el-main>
   </el-container>
 </template>
@@ -142,8 +142,8 @@ export default {
     margin: 0;
   }
   .el-header {
-    background-color: #B3C0D1;
-    color: #333;
+    background-color: #000;
+    color: #fff;
     text-align: center;
     line-height: 60px;
     position: relative;
@@ -154,7 +154,7 @@ export default {
     }
   }
   .el-main {
-    background-color: #E9EEF3;
+    background-color: #FFF;
     color: #333;
     text-align: center;
     line-height: 100%;
@@ -189,12 +189,24 @@ export default {
       margin-right: 30px;
       margin-bottom: 60px;
     }
+    .search-icon {
+      width: 102px;
+      background-color: #38F;
+      &:hover {
+        background-color: #2C73D8;
+      }
+    }
     .infinite-list-wrapper {
       display: inline-block;
-      width: calc(100% / 3 - 4px);
+      width: calc(100% / 3 - 10px);
       background-color: #fff;
+      border: 1px solid #E4E4E4;
       .list-title {
         margin-top: 16px;
+        font-size: 18px;
+        color: #000;
+        line-height: 40px;
+        letter-spacing: 0
       }
       .list {
         list-style: none;
@@ -207,10 +219,11 @@ export default {
           align-items: center;
           justify-content: center;
           height: 50px;
-          background: #e8f3fe;
+          background: #fff;
           margin: 10px;
-          color: #7dbcfc;
+          color: #666;
           justify-content: space-between;
+          box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
         }
       }
     }

@@ -261,11 +261,17 @@ export default {
 <style  lang="stylus">
 .el-header {
   .sign-in-button {
+    background: #404040;
+    border-color: #404040;
     position: absolute;
     right: 22px;
     top: 50%;
     width: 102px;
     transform: translateY(-50%);
+    &:hover {
+      background: #686868;
+      border-color: #686868;
+    }
   }
 }
 .el-dialog__wrapper {
