@@ -4,7 +4,7 @@
             <el-container>
                 <el-header class="common-header" height="48px">
                     <el-dropdown>
-                    <span>用户名：{{this.account}}</span>
+                    <span>用户名：{{account || userName}}</span>
                         <i class="el-icon-setting" style="margin-right: 15px"></i>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>
@@ -36,10 +36,11 @@ export default {
     data() {
         return {
             account: false,
-            platname: ''
+            platname: '',
+            userName: this.$store.getters.userInfo.userName
         };
     },
-    mounted () {
+    mounted() {
         this.initHeader();
     },
     methods: {
@@ -59,7 +60,7 @@ export default {
             if (cookiePath === '/receive') {
                 this.$cookies.remove(`${cookiePath.slice(1)}token`, cookiePath);
             } else if (cookiePath === '/donate') {
-                this.$store.dispatch('setloginId', '');
+                this.$store.dispatch('setUserInfo', {});
             }
             const path = location.pathname.replace('list', 'login');
             this.$router.push(path);

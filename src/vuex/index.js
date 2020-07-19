@@ -5,26 +5,26 @@ import createPersistedState from 'vuex-persistedstate';
 Vue.use(Vuex);
 
 const state = {
-    loginId: ''
+    userInfo: {}
 };
 
 // 获取状态信息
 const getters = {
-    loginId: state => state.loginId
+    userInfo: state => state.userInfo
 };
 
 // 更改状态信息
 const mutations = {
-    setloginId(state, loginId) {
-        state.loginId = loginId;
+    setUserInfo(state, userInfo) {
+        state.userInfo = userInfo;
     }
 };
 
 const actions = {
-    setloginId: ({
+    setUserInfo: ({
         commit
-    }, loginId) => {
-        commit('setloginId', loginId);
+    }, userInfo) => {
+        commit('setUserInfo', userInfo);
     }
 };
 export default new Vuex.Store({

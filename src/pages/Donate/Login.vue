@@ -83,7 +83,8 @@ export default {
             const {status, data, msg} = await action({...this.form});
             if (status === 0) {
                 this.$message.success('登录成功');
-                await this.$store.dispatch('setloginId', data.userId);
+                await this.$store.dispatch('setUserInfo', data);
+                localStorage.setItem('donateToken', data.token);
                 this.$router.push('/donate/list');
             } else {
                 this.$message.error(msg);
