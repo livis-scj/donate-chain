@@ -63,6 +63,7 @@
 
 <script>
 import axios from '../http.js';
+import {getToken} from '../utils/index.js'
 
 export default {
     name: 'SignInButton',
@@ -149,20 +150,9 @@ export default {
     },
     methods: {
         checkSignIn() {
-            const accountToken = this.getToken();
+            const accountToken = getToken(this);
             this.account = accountToken.account;
             this.token = accountToken.token;
-        },
-        getToken() {
-            const cookieToken = this.$cookies.get('token');
-            let account = '';
-            let token = '';
-            if (cookieToken) {
-                const accountToken = cookieToken.split(' ');
-                account = accountToken[0];
-                token = accountToken[1];
-            }
-            return {account, token};
         },
         closDialog (formName) {
             if (formName === 'signInForm') {
@@ -184,7 +174,7 @@ export default {
             }
         },
         openDialog(formName) {
-            const accountToken = this.getToken();
+            const accountToken = getToken(this);
             const token = accountToken.token;
             if (formName === 'signInForm') {
                 if (token) {
@@ -201,7 +191,8 @@ export default {
         signOut () {
             this.token = null;
             this.account = null;
-            this.$cookies.remove('token');
+            const cookiePath = '/' + location.pathname.split('/')[1];
+            this.$cookies.remove(`${cookiePath.slice(1)}token`, cookiePath);
         },
         signIn (formName) {
             this.buttonLoading = true;
@@ -212,6 +203,7 @@ export default {
                         this.form.mobile = '111';
                         this.form.username = this.form.userName;
                         axios.post('/api/donor/login', {...this.form}).then(res => {
+                            console.log(res);
                             if (+res.status === 0) {
                                 this.$message({
                                     message: '登录成功',
@@ -219,7 +211,8 @@ export default {
                                 });
                                 this.token = res.data.token;
                                 this.account = this.form.userName;
-                                this.$cookies.set('token', `${this.form.userName} ${res.data.token}`);
+                                const cookiePath = '/' + location.pathname.split('/')[1];
+                                this.$cookies.set(`${cookiePath.slice(1)}token`, `${data.userName} ${data.token} ${data.userId} ${data.name}, '1d', cookiePath);
                                 this.closDialog('signInForm');
                             } else {
                                 this.$message({

@@ -4,9 +4,10 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 export default new Router({
+    mode: 'history',
     routes: [
         {
-            path: '/',
+            path: '/search/index',
             name: 'Index',
             component: () => import(/* webpackChunkName: "Home" */ '@/pages/Index.vue')
         },
@@ -14,6 +15,18 @@ export default new Router({
             path: '/donate/login',
             name: 'list',
             component: () => import(/* webpackChunkName: "Home" */ '@/pages/Donate/Login.vue')
+        },
+        {
+            path: '/recive',
+            name: 'receive',
+            component: () => import(/* webpackChunkName: "Home" */ '@/pages/Receive/Login.vue'),
+            children: [
+                {
+                    path: '/receive/login',
+                    name: 'receiveLogin',
+                    component: () => import(/* webpackChunkName: "Home" */ '@/pages/Receive/Login.vue')
+                }
+            ]
         },
         {
             path: '/donate',
@@ -26,6 +39,11 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "Home" */ '@/pages/Donate/donate.vue')
                 },
                 {
+                    path: '/receive/list',
+                    name: 'receiveList',
+                    component: () => import(/* webpackChunkName: "Home" */ '@/pages/Receive/receive.vue')
+                },
+                {
                     path: '/home/activity',
                     name: 'activity',
                     component: () => import(/* webpackChunkName: "Home" */ '@/pages/Home/activity.vue')
@@ -33,7 +51,7 @@ export default new Router({
             ]
         },
         {
-            path: '/search',
+            path: '/search/list',
             name: 'Search',
             component: () => import(/* webpackChunkName: "Home" */ '@/pages/Home/search.vue')
         }

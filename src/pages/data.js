@@ -39,223 +39,286 @@ export const carouselImage = [
 export const donateRank = [
     {
         name: '百度',
+        index: 1,
         value: '100,000,000元'
     },
     {
         name: '韩红',
+        index: 2,
         value: '100,000,000元'
     },
     {
         name: 'Google',
+        index: 3,
         value: '90,000,000元'
     },
     {
         name: '阿里巴巴',
+        index: 4,
         value: '80,000,000元'
     },
     {
         name: '今日头条',
+        index: 5,
         value: '70,000,000元'
     },
     {
         name: '张自城',
+        index: 6,
         value: '60,000,000元'
     },
     {
         name: '腾讯',
+        index: 7,
         value: '50,000,000元'
     },
     {
         name: '周杰伦',
+        index: 8,
         value: '40,000,000元'
     },
     {
         name: '李易峰',
+        index: 9,
         value: '30,000,000元'
     },
     {
         name: '张雪迎',
+        index: 10,
         value: '20,000,000元'
     },
     {
         name: '范冰冰',
+        index: 11,
         value: '10,000,000元'
     },
     {
         name: '华为',
+        index: 12,
         value: '10,000,000元'
-    },
-    {
-        name: '匿名网友',
-        value: '5,000,000元'
     }
 ];
 
 export const donatePeple = [
     {
         name: '张大壮',
+        index: 1,
         value: '100元',
         time: '11:00'
     },
     {
         name: '李厚福',
+        index: 2,
         value: '100元',
         time: '10:59'
     },
     {
         name: '李开富',
+        index: 3,
         value: '100元',
         time: '10:45'
     },
     {
         name: '张国柱',
+        index: 4,
         value: '100元',
         time: '10:39'
     },
     {
         name: '张志远',
+        index: 5,
         value: '100元',
         time: '10:22'
     },
     {
         name: '孙思达',
+        index: 6,
         value: '100元',
         time: '09:56'
     },
     {
         name: '吕文达',
+        index: 7,
         value: '100元',
         time: '09:32'
     },
     {
         name: '孙楚',
+        index: 8,
         value: '100元',
         time: '09:23'
     },
     {
         name: '孙天学',
+        index: 9,
         value: '100元',
         time: '09:11'
     },
     {
         name: '孙小五',
+        index: 10,
         value: '100元',
         time: '08:46'
     },
     {
         name: '杨勇',
+        index: 11,
         value: '100元',
         time: '08:37'
     },
     {
         name: '郝爱民',
+        index: 12,
         value: '100元',
         time: '08:22'
     },
     {
         name: '冯兴国',
+        index: 13,
         value: '100元',
         time: '07:31'
     }
 ];
 
-export const poorPeple = [
+export const poorPeople = [
     {
         name: '彭万里',
+        index: 1,
         region: '浙江 衢州'
     },
     {
         name: '高大山',
+        index: 2,
         region: '湖南 岳阳'
     },
     {
         name: '谢大海',
+        index: 3,
         region: '河北 邢台'
     },
     {
         name: '马宏宇',
+        index: 4,
         region: '河北 衡水'
     },
     {
         name: '林莽',
+        index: 5,
         region: '辽宁 本溪'
     },
     {
         name: '黄强辉',
+        index: 6,
         region: '辽宁 本溪'
     },
     {
         name: '章汉夫',
+        index: 7,
         region: '辽宁 丹东'
     },
     {
         name: '范长江',
+        index: 8,
         region: '辽宁 丹东'
     },
     {
         name: '林君雄',
+        index: 9,
         region: '辽宁 丹东'
     },
     {
         name: '谭平山',
+        index: 10,
         region: '辽宁 鞍山'
     },
     {
         name: '朱希亮',
+        index: 11,
         region: '辽宁 鞍山'
     },
     {
         name: '李四光',
+        index: 12,
         region: '湖南 岳阳'
     },
     {
         name: '甘铁生',
+        index: 13,
         region: '黑龙江 伊春'
     },
     {
         name: '张伍',
+        index: 14,
         region: '黑龙江 伊春'
     },
     {
         name: '绍祖',
+        index: 15,
         region: '黑龙江 鸡西'
     },
     {
         name: '马继祖',
+        index: 16,
         region: '黑龙江 鸡西'
     },
     {
         name: '程孝先',
+        index: 17,
         region: '黑龙江 鸡西'
     },
     {
         name: '宗敬先',
+        index: 18,
         region: '黑龙江 鹤岗'
     },
     {
         name: '年广嗣',
+        index: 19,
         region: '黑龙江 鹤岗'
     },
     {
         name: '汤绍箕',
+        index: 20,
         region: '黑龙江 鹤岗'
     },
     {
         name: '吕显祖',
+        index: 21,
         region: '黑龙江 佳木斯'
     },
     {
         name: '何光宗',
+        index: 22,
         region: '黑龙江 佳木斯'
     },
     {
         name: '孙念祖',
+        index: 23,
         region: '黑龙江 佳木斯'
     },
     {
         name: '马建国',
+        index: 24,
         region: '西藏 拉萨'
     }
 ];
 
 export const SETTIMEOUTTIME = 60 * 1000;
+
+export const MOCK = {
+    'status': 0,
+    'msg': 'string',
+    'data': [
+        {
+            'activityId': 0,
+            'theme': 'string',
+            'description': 'string',
+            'startTime': '2020-07-16T10:38:36.825Z',
+            'endTime': '2020-07-16T10:38:36.825Z',
+            'certCode': 'string',
+            'status': 'string',
+            'donatoryId': 0,
+            'drawStatus': 'string'
+        }
+    ]
+};

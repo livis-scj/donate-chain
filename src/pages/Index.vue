@@ -2,71 +2,61 @@
   <el-container>
     <el-header>
       <span class="header-title">扶贫捐赠信息追溯服务平台</span>
-      <v-sign-in-button></v-sign-in-button>
     </el-header>
     <el-main>
       <el-carousel :interval="4000" type="card">
         <el-carousel-item v-for="(item, index) in carouselImage" :key="index">
-          <img :src="item.url" alt="item.title" width="800px" height="300px">
+          <img :src="item.url" alt="item.title">
           <h3 class="carousel-title">{{ item.title }}</h3>
         </el-carousel-item>
       </el-carousel>
       <div>
-        <el-input v-model="input" placeholder="请输入内容"></el-input>
+        <el-input v-model="input" @keyup.enter.native="search" placeholder="请输入内容"></el-input>
         <el-button type="primary" class="search-icon" icon="el-icon-search" @click="search">搜索</el-button>
       </div>
-      <div>
+      <div class="auto-scroll">
         <div class="infinite-list-wrapper" style="overflow:auto">
           <div class="list-title">捐赠排名</div>
           <ul
-            class="list"
-            v-infinite-scroll="load"
-            infinite-scroll-disabled="disabled">
+            class="list rank">
             <li v-for="(item, index) in donateRank" v-bind:key="index" class="list-item rank">
-              <span><span>{{index + 1}}</span>：{{item.name}}</span>
+              <span><span>{{item.index}}</span>：{{item.name}}</span>
               <span>{{item.value}}</span>
             </li>
-            <li v-if="loading">加载中...</li>
-            <li v-if="noMore">没有更多了</li>
           </ul>
         </div>
         <div class="infinite-list-wrapper" style="overflow:auto">
           <div class="list-title">贫困群众</div>
           <ul
-            class="list"
-            v-infinite-scroll="load"
-            infinite-scroll-disabled="disabled">
-            <li v-for="(item, index) in poorPeple" v-bind:key="index" class="list-item poor">
+            class="list poor-people">
+            <li v-for="(item, index) in poorPeople" v-bind:key="index" class="list-item poor">
               <span>{{item.name}}</span>
               <span>{{item.region}}</span>
             </li>
-            <li v-if="loading">加载中...</li>
-            <li v-if="noMore">没有更多了</li>
           </ul>
         </div>
         <div class="infinite-list-wrapper" style="overflow:auto">
           <div class="list-title">捐赠者</div>
           <ul
-            class="list"
-            infinite-scroll-disabled="disabled">
+            class="list donors">
             <li v-for="(item, index) in donatePeple" v-bind:key="index" class="list-item donate">
               <span>{{item.donorName}}</span>
-              <span>{{item.name}}{{item.type}}{{item.unit}}</span>
+              <span>{{item.name}}{{item.quantity}}{{item.unit}}</span>
               <span>{{item.donateTime | tiemFormat}}</span>
             </li>
           </ul>
         </div>
       </div>
-      <div class="footer"><div class="m-report-foot page">京公网安备案11000002000001号 ©2020 TianYan <a href="#" target="_blank">使用天眼前必读</a></div></div>
+      <div class="footer" style="position: relative;"><div class="m-report-foot page">京公网安备案11000002300011号 ©2020 TianYan <a href="" target="_blank">使用天眼前必读</a></div></div>
     </el-main>
   </el-container>
 </template>
 
 <script>
-import {carouselImage, donateRank, poorPeple, SETTIMEOUTTIME} from './data.js';
+import {carouselImage, donateRank, poorPeople, SETTIMEOUTTIME} from './data.js';
 import axios from '../http';
 import moment from 'moment';
-import SignInButton from '../components/SignInButton.vue';
+import {getToken} from '../utils/index.js';
 
 export default {
     data () {
@@ -75,60 +65,66 @@ export default {
             loading: false,
             carouselImage,
             donateRank,
-            poorPeple,
+            poorPeople,
             donatePeple: [],
-            input: ''
+            input: '',
+            first: true
         };
     },
     computed: {
-        noMore () {
-            return this.count >= 20;
-        },
-        disabled () {
-            return this.loading || this.noMore;
-        }
-    },
-    components: {
-        'v-sign-in-button': SignInButton
     },
     mounted () {
         this.getDynamicDonate();
+        if (this.first) {
+            this.initDate();
+        }
+        this.allAutoScroll();
         this.setTimeoutId = setTimeout(() => {
             this.getDynamicDonate();
         }, SETTIMEOUTTIME);
     },
     filters: {
         tiemFormat (value) {
-            return moment(value).format('YY-MM-DD hh:mm:ss');
+            return moment(value).format('YYYY-MM-DD hh:mm:ss');
         }
     },
     methods: {
-        getToken() {
-            const cookieToken = this.$cookies.get('token');
-            let account = '';
-            let token = '';
-            if (cookieToken) {
-                const accountToken = cookieToken.split(' ');
-                account = accountToken[0];
-                token = accountToken[1];
-            }
-            return {account, token};
+        initDate() {
+            this.donateRank.push(...this.donateRank.slice(0, 5));
+            this.poorPeople.push(...this.poorPeople.slice(0, 5));
+            this.first = false;
+        },
+        allAutoScroll() {
+            const rank = document.querySelector('.auto-scroll .rank');
+            const poorPeople = document.querySelector('.auto-scroll .poor-people');
+            const donors = document.querySelector('.auto-scroll .donors');
+            this.elementAutoScroll(rank);
+            this.elementAutoScroll(poorPeople);
+            this.elementAutoScroll(donors);
+        },
+        elementAutoScroll(ele) {
+            setTimeout(() => {
+                if (ele.scrollHeight) {
+                    if (ele.scrollTop + ele.offsetHeight >= ele.scrollHeight) {
+                        ele.scrollTop = 11.5;
+                    } else {
+                        ele.scrollTop += 1.5;
+                        window.requestAnimationFrame(this.elementAutoScroll);
+                    }
+                    this.elementAutoScroll(ele);
+                }
+            }, 50);
         },
         getDynamicDonate () {
             axios.get('/api/donate/allDonations', {pageNo: 1, pageSize: 20}, {
                 headers: {
-                    'X-token': JSON.stringify(this.getToken().token)
+                    'X-token': JSON.stringify(getToken(this).token)
                 }
             }).then(res => {
-                this.donatePeple = res.data.dataList;
+                const dataList = res.data.dataList;
+                dataList.push(...dataList.slice(0, 5));
+                this.donatePeple = dataList;
             });
-        },
-        load () {
-            this.loading = true;
-            setTimeout(() => {
-                this.count += 2;
-                this.loading = false;
-            }, 2000);
         },
         search () {
             this.$router.push({name: 'Search', params: {query: this.input}});
@@ -166,11 +162,12 @@ export default {
     .el-carousel {
       margin-bottom: 60px;
       position: relative;
-      .el-carousel__item:nth-child(2n) {
+      .el-carousel__item {
         background-color: #99a9bf;
-      }
-      .el-carousel__item:nth-child(2n+1) {
-        background-color: #d3dce6;
+        img {
+          width: 100%;
+          height: 100%;
+        }
       }
       .el-carousel__item .carousel-title {
         color: #fff;
@@ -213,6 +210,9 @@ export default {
         padding: 0;
         overflow: auto;
         height: 300px;
+        &::-webkit-scrollbar {
+          display: none;
+        }
         .list-item {
           padding: 0 20px;
           display: flex;
@@ -228,7 +228,7 @@ export default {
       }
     }
     .footer {
-      margin-top: 10px;
+      margin-top: 50px;
       .m-report-foot {
         text-align: center;
         color: #999;

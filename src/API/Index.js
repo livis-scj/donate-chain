@@ -18,3 +18,5 @@ export const submitDonate = data => axios.post('/api/donate/submit', data);
 export const getActivity = params => axios.get('/api/activity/query', {params});
 // 获取追溯详情
 export const getDonateTrace = params => axios.get('/api/donate/queryByDonorCertCode', {params});
+// 受捐人登录
+export const receiveLogin = data => axios.post('/api/donatory/login', data);
