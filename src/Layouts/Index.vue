@@ -8,6 +8,7 @@
                         <i class="el-icon-setting" style="margin-right: 15px"></i>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>
+                                <div>{{name}}</div>
                                 <el-button type="text">修改密码</el-button>
                                 <el-button type="text" @click="handleLogout">退出登录</el-button>
                             </el-dropdown-item>
@@ -37,11 +38,13 @@ export default {
         return {
             account: false,
             platname: '',
-            userName: this.$store.getters.userInfo.userName
+            userName: this.$store.getters.userInfo.userName,
+            name: ''
         };
     },
     mounted() {
         this.initHeader();
+        this.name = getToken(this).name;
     },
     methods: {
         initHeader() {

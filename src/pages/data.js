@@ -305,6 +305,79 @@ export const poorPeople = [
 
 export const SETTIMEOUTTIME = 60 * 1000;
 
+export const courseData = [
+    {
+        date: '2017年5月',
+        desc: '百度与佰仟租赁等联合发行国内首单区块链技术支持的ABS项目',
+        isImportant: false
+    },
+    {
+        date: '2018年3月',
+        desc: '区块链版权平台上线',
+        isImportant: false
+    },
+    {
+        date: '2018年8月',
+        desc: '度链网络科技（海南）有限公司成立',
+        isImportant: false
+    },
+    {
+        date: '2018年9月',
+        desc: '《百度区块链区块链白皮书V1.0》发布',
+        isImportant: false
+    },
+    {
+        date: '2018年10月',
+        desc: '海南省人民政府&amp;百度签订合作战略协议',
+        isImportant: false
+    },
+    {
+        date: '2018年12月',
+        desc: '与北京互联网法院共建区块链司法系统“天平链”',
+        isImportant: false
+    },
+    {
+        date: '2019年3月',
+        desc: '数据协同解决方案XuperData发布',
+        isImportant: false
+    },
+    {
+        date: '2019年4月',
+        desc: '获得首批区块链信息服务获得首批备案',
+        isImportant: false
+    },
+    {
+        date: '2019年5月',
+        desc: 'XuperChain技术正式宣布开源',
+        isImportant: false
+    },
+    {
+        date: '2019年6月',
+        desc: '智慧城市项目入选全国“双创周”颠覆性创新榜TOP10',
+        isImportant: true
+    },
+    {
+        date: '2019年7月',
+        desc: '通过工信部国家工业信息安全发展研究中心安全性、性能测评',
+        isImportant: true
+    },
+    {
+        date: '2019年8月',
+        desc: '宣布与重庆市达成区块链医疗处方流转平台合作',
+        isImportant: false
+    },
+    {
+        date: '2019年9月',
+        desc: '与青岛仲裁委联合推出区块链司法系统',
+        isImportant: false
+    },
+    {
+        date: '2019年12月',
+        desc: '通过工信部电子四所安全性、性能测评；作为中国唯一企业代表出席WTO区块链论坛',
+        isImportant: true
+    }
+];
+
 export const MOCK = {
     'status': 0,
     'msg': 'string',
