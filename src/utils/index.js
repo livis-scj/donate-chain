@@ -28,7 +28,7 @@ export const timerFormat = timer => {
  * }
  */
 export const getToken = that => {
-    const cookiePath = '/' + location.pathname.split('/')[1];
+    const cookiePath = getPath();
     const cookieToken = that.$cookies.get(`${cookiePath.slice(1)}token`);
     let account = '';
     let token = '';
@@ -42,4 +42,17 @@ export const getToken = that => {
         name = accountToken[3];
     }
     return {account, token, userId, name};
+};
+
+/**
+ * 获取path
+ * @param {null}
+ * @return {String}}
+ * {
+ *      cookiePath 路径
+ * }
+ */
+export const getPath = () => {
+    const cookiePath = '/' + location.hash.split('/')[1];
+    return cookiePath;
 };

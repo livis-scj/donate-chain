@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import {getToken} from '../utils/index.js';
+import {getToken, getPath} from '../utils/index.js';
 
 export default {
     data() {
@@ -49,7 +49,7 @@ export default {
     methods: {
         initHeader() {
             const {account} = getToken(this);
-            const cookiePath = '/' + location.pathname.split('/')[1];
+            const cookiePath = getPath();
             this.account = account;
             if (cookiePath === '/receive') {
                 this.platname = '扶贫领取服务平台';
@@ -59,13 +59,13 @@ export default {
         },
         handleLogout() {
             this.$message.success('登出成功');
-            const cookiePath = '/' + location.pathname.split('/')[1];
+            const cookiePath = getPath();
             if (cookiePath === '/receive') {
                 this.$cookies.remove(`${cookiePath.slice(1)}token`, cookiePath);
             } else if (cookiePath === '/donate') {
                 this.$store.dispatch('setUserInfo', {});
             }
-            const path = location.pathname.replace('list', 'login');
+            const path = location.hash.replace('list', 'login').slice(1);
             this.$router.push(path);
         }
     }

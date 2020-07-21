@@ -65,9 +65,9 @@
           </div>
       </div>
       <h2 class="echarts-title">2013年至2018年社会捐赠总额(单位:亿元)</h2>
-      <div id="echarts" style="width:1200px;height:800px;left:50%;transform:translateX(-50%);margin-top:20px"></div>
+      <div id="echarts" style="width:900px;height:600px;left:50%;transform:translateX(-50%);margin-top:20px"></div>
       <h2 class="video-title">习近平在宁夏考察时强调 决胜全面建成小康社会决战脱贫攻坚继续建设经济繁荣民族团结环境优美人民富裕的美丽新宁夏</h2>
-      <video width="1200px" controls>
+      <video width="800px" controls :poster="videoPost">
         <source :src="xijinpin" type="video/mp4">
         您的浏览器不支持Video标签。
       </video>
@@ -80,6 +80,7 @@
 import {carouselImage, donateRank, poorPeople, SETTIMEOUTTIME, courseData} from './data.js';
 import point from '../assets/point.png';
 import xijinpin from '../assets/xijinpin.mp4';
+import videoPost from '../assets/video-post.jpg';
 import axios from '../http';
 import moment from 'moment';
 import echarts from 'echarts';
@@ -98,7 +99,8 @@ export default {
             first: true,
             point,
             courseData,
-            xijinpin
+            xijinpin,
+            videoPost
         };
     },
     computed: {
@@ -123,6 +125,7 @@ export default {
         initEcharts() {
             console.log(echarts);
             var myChart = echarts.init(document.getElementById('echarts'));
+
             // 绘制图表
             myChart.setOption({
                 title: {
@@ -132,10 +135,23 @@ export default {
                 xAxis: {
                     data: ['2013年', '2014年', '2015年', '2016年', '2017年', '2018年']
                 },
-                yAxis: {},
+                yAxis: {
+                    type: 'value',
+                    boundaryGap: [0, '30%']
+                },
                 series: [{
+                    type: 'line',
+                    smooth: 0.6,
+                    name: '捐赠额',
+                    lineStyle: {
+                        color: 'green',
+                        width: 5
+                    },
+                    data: [998, 1096, 1211, 1383, 1493, 3215]
+                }, {
                     name: '捐赠额',
                     type: 'bar',
+                    barWidth: '60%',
                     data: [998, 1096, 1211, 1383, 1493, 3215]
                 }]
             });

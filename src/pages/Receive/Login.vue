@@ -38,7 +38,7 @@
             </div>
             <div class="footer">
                 <div class="copyright">
-                    <span>扶贫捐助信息平台</span>
+                    <span>扶贫领用信息平台</span>
                     <span>Copyright 2020 © 百度智能小程序研发部出品</span>
                 </div>
             </div>
@@ -48,7 +48,7 @@
 
 <script>
 import {receiveLogin} from '@/API';
-import {getToken} from '../../utils/index.js';
+import {getToken, getPath} from '../../utils/index.js';
 
 export default {
     data() {
@@ -112,8 +112,8 @@ export default {
             if (status === 0) {
                 this.$message.success('登录成功');
                 this.token = data.token;
-                const cookiePath = '/' + location.pathname.split('/')[1];
-                this.$cookies.set(`${cookiePath.slice(1)}token`, `${data.userName} ${data.token} ${data.userId} ${data.name}`, '1d', cookiePath);
+                const cookiePath = getPath();
+                this.$cookies.set(`${cookiePath.slice(1)}token`, `${data.userName} ${data.token} ${data.userId} ${data.name}`, '1d', '/');
                 this.$router.push('/receive/list');
             } else {
                 this.$message.error(msg);

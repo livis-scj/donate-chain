@@ -17,6 +17,7 @@
               <el-table-column label="操作">
                   <template slot-scope="scope">
                       <el-button type="text" :disabled="scope.row.drawStatus === 1" @click="handleDetail(scope.row)">领取</el-button>
+                      <el-button type="text" style="margin-left: 0;" :disabled="scope.row.drawStatus !== 1" @click="openDialog()">查看</el-button>
                   </template>
               </el-table-column>
           </el-table>
@@ -40,7 +41,7 @@
         <div class="certificate">
             <div class="header">爱心领取凭证</div>
             <h1>{{name}}先生/女士:</h1>
-            <div class="desc">您参加“{{certificateData.theme}}”主题活动，取得爱心物资“{{'certificateData'}}”，爱心码为“{{certificateData.certCode}}”，凭爱心码可以于追溯平台查找捐赠者，请妥善保管。</div>
+            <div class="desc">您参加“{{certificateData.theme}}”主题活动，取得爱心物资“人民币{{certificateData.recipientAmount}}元”，爱心码为“{{certificateData.certCode}}”，凭爱心码可以于追溯平台查找捐赠者，请妥善保管。</div>
             <div class="enterprise">扶贫领取服务平台</div>
             <div class="data">{{timeFormatChinese((new Date()).getTime())}}</div>
         </div>
@@ -81,6 +82,10 @@ export default {
                     }
                 },
                 {
+                    text: '可领金额',
+                    value: 'recipientAmount'
+                },
+                {
                     text: '活动状态',
                     value: 'status',
                     formatter: row => {
@@ -91,6 +96,8 @@ export default {
                             text = '实施中';
                         } else if (row.status === 2) {
                             text = '实施完成';
+                        } else if (row.status === 3) {
+                            text = '活动结束';
                         }
                         return text;
                     }
@@ -153,6 +160,9 @@ export default {
                     });
                 }
             });
+        },
+        openDialog() {
+            this.successDialog = true;
         },
         timeFormat (value) {
             return moment(value).format('YYYY-MM-DD hh:mm:ss');
