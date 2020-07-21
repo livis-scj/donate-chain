@@ -80,6 +80,7 @@
                   </div>
               </el-form-item>
               <el-form-item
+                v-if="form.type === '2'"
                 label="物资名称"
                 prop="name"
                 required>
@@ -114,11 +115,12 @@
       <el-dialog top="8vh" width="50%" custom-class="donate" :visible.sync="successDialog">
           <div class="certificate">
               <div class="header">捐赠证书</div>
-              <h1>尊敬的 爱心人士：</h1>
-              <div class="desc">感谢您对于贫困人员捐出的<span style="color:orange">{{certificateData.money}}元。</span>爱心码为{{certificateData.certificate}}，凭爱心码可以于追溯平台查找查询，请妥善保管。</div>
+              <h1>尊敬的 {{certificateData.donorName}} 先生/女士：</h1>
+              <div class="desc">感谢您对于贫困人员捐出的<span style="color:orange">{{certificateData.quantity}}元。</span></div>
+              <div class="desc">爱心码为{{certificateData.certCode}}，凭爱心码可以于追溯平台查找查询，请妥善保管。</div>
               <div class="desc">特颁此证！</div>
               <div class="enterprise">扶贫捐助信息平台</div>
-              <div class="data">{{timeFormatChinese((new Date()).getTime())}}</div>
+              <div class="data">{{certificateData.donateTime | timeFormat}}</div>
           </div>
       </el-dialog>
       <el-drawer
@@ -225,7 +227,7 @@ export default {
         return {
             form: {
                 donorId: '',
-                name: '',
+                name: '善款',
                 type: '1',
                 unit: '元',
                 quantity: ''
@@ -393,7 +395,7 @@ export default {
         },
         onSubmit() {
             this.loading = true;
-            const {donorId = null, name, type, unit, quantity, isAnonymous} = this.form;
+            const {donorId = null, type, unit, quantity, isAnonymous} = this.form;
             this.$refs.form.validate(async valid => {
                 if (valid) {
                     let {status, msg, data} = await submitDonate({
@@ -402,7 +404,7 @@ export default {
                         isAnonymous,
                         details: [
                             {
-                                name,
+                                name: '善款',
                                 type,
                                 unit,
                                 quantity
@@ -413,8 +415,7 @@ export default {
                         this.$message.success('添加成功！');
                         this.$refs.form.resetFields();
                         this.getDonateData();
-                        this.certificateData.money = quantity;
-                        this.certificateData.certificate = data;
+                        this.certificateData = data;
                         this.donateDialogVisible = false;
                         this.successDialog = true;
                     } else {
@@ -456,9 +457,6 @@ export default {
                 idcard: '',
                 mobile: ''
             };
-        },
-        handleChange(e) {
-            console.log(e);
         }
     }
 };
@@ -495,7 +493,7 @@ section
                 padding 0 100px
                 text-indent 2em
             .data
-                padding 0px 120px 0
+                padding 0px 100px 0
                 text-align right
             .enterprise
                 padding 20px 100px 0

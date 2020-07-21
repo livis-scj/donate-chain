@@ -322,6 +322,7 @@ export default {
             form: {
                 type: '1',
                 unit: '元',
+                name: '善款',
                 configs: [{
                     quantity: '',
                     amount: '',
