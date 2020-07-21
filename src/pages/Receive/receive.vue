@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="receive-list">
       <section class="table">
           <div style="display:flex;justify-content: space-between;">
               <span style="line-height:40px;font-size:20px">领取详情</span>
@@ -32,7 +32,7 @@
           </el-pagination>
       </section>
       <el-dialog
-        :close-on-click-modal="false"
+        :close-on-click-modal="true"
         top="8vh"
         width="428px"
         center
@@ -43,7 +43,7 @@
             <h1>{{name}}先生/女士:</h1>
             <div class="desc">您参加“{{certificateData.theme}}”主题活动，取得爱心物资“人民币{{certificateData.recipientAmount}}元”，爱心码为“{{certificateData.certCode}}”，凭爱心码可以于追溯平台查找捐赠者，请妥善保管。</div>
             <div class="enterprise">扶贫领取服务平台</div>
-            <div class="data">{{timeFormatChinese((new Date()).getTime())}}</div>
+            <div class="data">{{timeFormatChinese(certificateData.drawDate)}}</div>
         </div>
       </el-dialog>
   </div>
@@ -186,43 +186,50 @@ export default {
         handleCurrentChange(val) {
             this.pageNo = val;
             this.getReceiveData();
+        },
+        closDialog(dialog) {
+            this[dialog] = false;
+            this.getReceiveData();
         }
     }
 };
 </script>
 
-<style lang="stylus" scoped>
-section
-    background #FFF
-    padding 24px
-.search
-    margin-bottom 16px
-    padding-bottom 8px
-.certificate
-    background url('../../assets/receive-bg.png') no-repeat
-    background-size: 100% 100%
-    height 500px
-    position relative
-    top: 50%
-    left: 50%
-    transform: translateX(-50%)
-    .header
-        padding-top: 78px;
-        text-align: center;
-        font-size: 18px;
-    h1
-        padding: 0 56px;
-    .desc
-        padding: 0 56px;
-        text-indent: 2em;
-    .data
-        padding : 0px 56px 0;
-        text-align: right;
-    .enterprise
-        padding : 20px 56px 0;
-        text-align: right;
-.el-dialog__header
-    display: none;
-.el-dialog__body
-    padding: 0;
+<style lang="stylus">
+.receive-list
+    section
+        background #FFF
+        padding 24px
+    .search
+        margin-bottom 16px
+        padding-bottom 8px
+    .certificate
+        background url('../../assets/receive-bg.png') no-repeat
+        background-size: 100% 100%
+        height 500px
+        position relative
+        top: 50%
+        left: 50%
+        transform: translateX(-50%)
+        .header
+            padding-top: 78px;
+            text-align: center;
+            font-size: 18px;
+        h1
+            padding: 0 56px;
+        .desc
+            padding: 0 56px;
+            text-indent: 2em;
+        .data
+            padding : 0px 56px 0;
+            text-align: right;
+        .enterprise
+            padding : 20px 56px 0;
+            text-align: right;
+    .el-dialog__header
+        position: absolute;
+        right: 20px;
+        z-index: 2;
+    .el-dialog__body
+        padding: 0;
 </style>

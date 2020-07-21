@@ -1,5 +1,5 @@
 <template>
-    <div class="login">
+    <div class="receive-login">
         <div class="container">
             <div class="top">
                 <div class="header">
@@ -124,8 +124,8 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
-.login
+<style lang="stylus">
+.receive-login
     height 100%
     .container
         min-height 100%

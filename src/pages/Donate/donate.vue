@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="donate-list">
       <section class="search" v-if="$store.getters.userInfo.userId === 9900000">
           <el-form ref="searchForm" :model="searchForm" label-width="80px">
               <el-row>
@@ -463,46 +463,46 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-section
-    background #FFF
-    padding 24px
-.search
-    margin-bottom 16px
-    padding-bottom 8px
-.el-dialog__wrapper
-    .donate
-        width 1000px
-        el-dialog__header
-            display none
-        .certificate
-            background url(../../assets/donate.png) no-repeat
-            background-size: 100% 100%
-            height 600px
-            position relative
-            top: 50%
-            left: 50%
-            transform: translateX(-50%)
-            .header
-                padding-top 78px
-                text-align center
-                font-size 22px
-                font-weight 700
-            h1
-                padding 0 100px
-            .desc
-                padding 0 100px
-                text-indent 2em
-            .data
-                padding 0px 100px 0
-                text-align right
-            .enterprise
-                padding 20px 100px 0
-                text-align right
-.el-drawer__wrapper
-    .detail-drawer
-        width 500px
-        .el-drawer__body
-            max-height 500px
-            overflow scroll
-
+.donate-list
+    section
+        background #FFF
+        padding 24px
+    .search
+        margin-bottom 16px
+        padding-bottom 8px
+    .el-dialog__wrapper
+        .donate
+            width 1000px
+            el-dialog__header
+                display none
+            .certificate
+                background url(../../assets/donate.png) no-repeat
+                background-size: 100% 100%
+                height 600px
+                position relative
+                top: 50%
+                left: 50%
+                transform: translateX(-50%)
+                .header
+                    padding-top 78px
+                    text-align center
+                    font-size 22px
+                    font-weight 700
+                h1
+                    padding 0 100px
+                .desc
+                    padding 0 100px
+                    text-indent 2em
+                .data
+                    padding 0px 100px 0
+                    text-align right
+                .enterprise
+                    padding 20px 100px 0
+                    text-align right
+    .el-drawer__wrapper
+        .detail-drawer
+            width 500px
+            .el-drawer__body
+                max-height 500px
+                overflow scroll
 </style>

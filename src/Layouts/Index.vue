@@ -61,7 +61,7 @@ export default {
             this.$message.success('登出成功');
             const cookiePath = getPath();
             if (cookiePath === '/receive') {
-                this.$cookies.remove(`${cookiePath.slice(1)}token`, cookiePath);
+                this.$cookies.remove(`${cookiePath.slice(1)}token`, '/');
             } else if (cookiePath === '/donate') {
                 this.$store.dispatch('setUserInfo', {});
             }

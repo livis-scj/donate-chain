@@ -63,7 +63,7 @@
 
 <script>
 import axios from '../http.js';
-import {getToken} from '../utils/index.js'
+import {getToken, getPath} from '../utils/index.js'
 
 export default {
     name: 'SignInButton',
@@ -191,8 +191,8 @@ export default {
         signOut () {
             this.token = null;
             this.account = null;
-            const cookiePath = '/' + location.pathname.split('/')[1];
-            this.$cookies.remove(`${cookiePath.slice(1)}token`, cookiePath);
+            const cookiePath = getPath();
+            this.$cookies.remove(`${cookiePath.slice(1)}token`, '/');
         },
         signIn (formName) {
             this.buttonLoading = true;
@@ -211,8 +211,8 @@ export default {
                                 });
                                 this.token = res.data.token;
                                 this.account = this.form.userName;
-                                const cookiePath = '/' + location.pathname.split('/')[1];
-                                this.$cookies.set(`${cookiePath.slice(1)}token`, `${data.userName} ${data.token} ${data.userId} ${data.name}, '1d', cookiePath);
+                                const cookiePath = getPath();
+                                this.$cookies.set(`${cookiePath.slice(1)}token`, `${data.userName} ${data.token} ${data.userId} ${data.name}, '1d', '/');
                                 this.closDialog('signInForm');
                             } else {
                                 this.$message({

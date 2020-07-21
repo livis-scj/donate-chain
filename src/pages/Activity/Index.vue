@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  class="activity-index">
       <section class="table">
           <div style="display:flex;justify-content: space-between;">
               <span style="line-height:40px;font-size:16px">总计捐款：{{totalMoney}}元</span>
@@ -521,16 +521,17 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-section
-    background #FFF
-    padding 24px
-.plan-list
-    margin-bottom 16px
-.row-item
-    padding-bottom 16px
-    display flex
-    .label
-        width 120px
-    .value
-        width 100%
+.activity-index
+    section
+        background #FFF
+        padding 24px
+    .plan-list
+        margin-bottom 16px
+    .row-item
+        padding-bottom 16px
+        display flex
+        .label
+            width 120px
+        .value
+            width 100%
 </style>

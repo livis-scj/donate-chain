@@ -1,79 +1,81 @@
 <template>
-  <el-container>
-    <el-header>
-      <span class="header-title">扶贫捐赠信息追溯服务平台</span>
-    </el-header>
-    <el-main>
-      <el-carousel :interval="4000" type="card">
-        <el-carousel-item v-for="(item, index) in carouselImage" :key="index">
-          <img :src="item.url" alt="item.title">
-          <h3 class="carousel-title">{{ item.title }}</h3>
-        </el-carousel-item>
-      </el-carousel>
-      <div class="slogen">科技服务生活 技术智领未来</div>
-      <div>
-        <el-input v-model="input" @keyup.enter.native="search" placeholder="请输入内容"></el-input>
-        <el-button type="primary" class="search-icon" icon="el-icon-search" @click="search">搜索</el-button>
-      </div>
-      <div class="auto-scroll">
-        <div class="infinite-list-wrapper" style="overflow:auto">
-          <div class="list-title">捐赠排名</div>
-          <ul
-            class="list rank">
-            <li v-for="(item, index) in donateRank" v-bind:key="index" class="list-item rank">
-              <span><span>{{item.index}}</span>：{{item.name}}</span>
-              <span>{{item.value}}</span>
-            </li>
-          </ul>
+  <div class="search-index">
+    <el-container>
+      <el-header>
+        <span class="header-title">扶贫捐赠信息追溯服务平台</span>
+      </el-header>
+      <el-main>
+        <el-carousel :interval="4000" type="card">
+          <el-carousel-item v-for="(item, index) in carouselImage" :key="index">
+            <img :src="item.url" alt="item.title">
+            <h3 class="carousel-title">{{ item.title }}</h3>
+          </el-carousel-item>
+        </el-carousel>
+        <div class="slogen">科技服务生活 技术智领未来</div>
+        <div>
+          <el-input v-model="input" @keyup.enter.native="search" placeholder="请输入内容"></el-input>
+          <el-button type="primary" class="search-icon" icon="el-icon-search" @click="search">搜索</el-button>
         </div>
-        <div class="infinite-list-wrapper" style="overflow:auto">
-          <div class="list-title">贫困群众</div>
-          <ul
-            class="list poor-people">
-            <li v-for="(item, index) in poorPeople" v-bind:key="index" class="list-item poor">
-              <span>{{item.name}}</span>
-              <span>{{item.region}}</span>
-            </li>
-          </ul>
-        </div>
-        <div class="infinite-list-wrapper" style="overflow:auto">
-          <div class="list-title">捐赠者</div>
-          <ul
-            class="list donors">
-            <li v-for="(item, index) in donatePeple" v-bind:key="index" class="list-item donate">
-              <span>{{item.donorName}}</span>
-              <span>{{item.name}}{{item.quantity}}{{item.unit}}</span>
-              <span>{{item.donateTime | tiemFormat}}</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="x-history x-frame">
-          <div class="x-block x-content">
-              <div class="x-block-title">超级链历程</div>
-              <div class="x-block-frame x-history-frame" id="x-history-banner">
-                  <ul class="x-history-list">
-                      <li class="x-history-item" v-for="(courseItem, courseIndex) in courseData" v-bind:key="courseIndex">
-                          <div class="x-history-item-body">
-                              <i class="x-history-item-headicon"><img :src="point"></i>
-                              <p class="x-history-item-title">{{courseItem.date}}</p>
-                              <p class="x-history-item-content">{{courseItem.desc}}</p>
-                          </div>
-                      </li>
-                  </ul>
-              </div>
+        <div class="auto-scroll">
+          <div class="infinite-list-wrapper" style="overflow:auto">
+            <div class="list-title">捐赠排名</div>
+            <ul
+              class="list rank">
+              <li v-for="(item, index) in donateRank" v-bind:key="index" class="list-item rank">
+                <span><span>{{item.index}}</span>：{{item.name}}</span>
+                <span>{{item.value}}</span>
+              </li>
+            </ul>
           </div>
-      </div>
-      <h2 class="echarts-title">2013年至2018年社会捐赠总额(单位:亿元)</h2>
-      <div id="echarts" style="width:900px;height:600px;left:50%;transform:translateX(-50%);margin-top:20px"></div>
-      <h2 class="video-title">习近平在宁夏考察时强调 决胜全面建成小康社会决战脱贫攻坚继续建设经济繁荣民族团结环境优美人民富裕的美丽新宁夏</h2>
-      <video width="800px" controls :poster="videoPost">
-        <source :src="xijinpin" type="video/mp4">
-        您的浏览器不支持Video标签。
-      </video>
-      <div class="footer" style="position: relative;"><div class="m-report-foot page">京公网安备案11000002300011号 ©2020 TianYan <a href="" target="_blank">使用天眼前必读</a></div></div>
-    </el-main>
-  </el-container>
+          <div class="infinite-list-wrapper" style="overflow:auto">
+            <div class="list-title">贫困群众</div>
+            <ul
+              class="list poor-people">
+              <li v-for="(item, index) in poorPeople" v-bind:key="index" class="list-item poor">
+                <span>{{item.name}}</span>
+                <span>{{item.region}}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="infinite-list-wrapper" style="overflow:auto">
+            <div class="list-title">捐赠者</div>
+            <ul
+              class="list donors">
+              <li v-for="(item, index) in donatePeple" v-bind:key="index" class="list-item donate">
+                <span style="width: 200px;text-align: left;">{{item.donorName}}</span>
+                <span style="width: 400px">{{item.name}}{{item.quantity}}{{item.unit}}</span>
+                <span style="width: 400px;text-align: right;">{{item.donateTime | tiemFormat}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="x-history x-frame">
+            <div class="x-block x-content">
+                <div class="x-block-title">扶贫历程</div>
+                <div class="x-block-frame x-history-frame" id="x-history-banner">
+                    <ul class="x-history-list">
+                        <li class="x-history-item" v-for="(courseItem, courseIndex) in courseData" v-bind:key="courseIndex">
+                            <div class="x-history-item-body">
+                                <i class="x-history-item-headicon"><img :src="point"></i>
+                                <p class="x-history-item-title">{{courseItem.date}}</p>
+                                <p class="x-history-item-content">{{courseItem.desc}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <h2 class="echarts-title">2013年至2018年社会捐赠总额(单位:亿元)</h2>
+        <div id="echarts" style="width:900px;height:600px;left:50%;transform:translateX(-50%);margin-top:20px"></div>
+        <h2 class="video-title">习近平在宁夏考察时强调 决胜全面建成小康社会决战脱贫攻坚继续建设经济繁荣民族团结环境优美人民富裕的美丽新宁夏</h2>
+        <video width="800px" controls :poster="videoPost">
+          <source :src="xijinpin" type="video/mp4">
+          您的浏览器不支持Video标签。
+        </video>
+        <div class="footer" style="position: relative;"><div class="m-report-foot page">京公网安备案11000002300011号 ©2020 TianYan <a href="" target="_blank">使用天眼前必读</a></div></div>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script>
@@ -125,7 +127,6 @@ export default {
         initEcharts() {
             console.log(echarts);
             var myChart = echarts.init(document.getElementById('echarts'));
-
             // 绘制图表
             myChart.setOption({
                 title: {
@@ -144,13 +145,14 @@ export default {
                     smooth: 0.6,
                     name: '捐赠额',
                     lineStyle: {
-                        color: 'green',
+                        color: '#2DB2EB',
                         width: 5
                     },
                     data: [998, 1096, 1211, 1383, 1493, 3215]
                 }, {
                     name: '捐赠额',
                     type: 'bar',
+                    color: '#EB4232',
                     barWidth: '60%',
                     data: [998, 1096, 1211, 1383, 1493, 3215]
                 }]
@@ -200,7 +202,8 @@ export default {
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+.search-index {
   body {
     margin: 0;
   }
@@ -423,6 +426,7 @@ export default {
     }
     .video-title {
       margin: 40px auto;
+      line-height: 1.5;
     }
     .footer {
       margin-top: 50px;
@@ -436,4 +440,5 @@ export default {
       }
     }
   }
+}
 </style>

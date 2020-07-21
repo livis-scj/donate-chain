@@ -307,64 +307,64 @@ export const SETTIMEOUTTIME = 60 * 1000;
 
 export const courseData = [
     {
+        date: '2012年3月',
+        desc: '柳州市在三江启动产业扶贫项目',
+        isImportant: false
+    },
+    {
+        date: '2012年5月',
+        desc: '柳州市在三江启动产业扶贫项目',
+        isImportant: false
+    },
+    {
+        date: '2013年5月',
+        desc: '云南地税系统教育扶贫投入近2800万元 惠及中小学生 ',
+        isImportant: false
+    },
+    {
+        date: '2014年10月',
+        desc: '共青团中央制定青少年开展扶贫日活动方案 ',
+        isImportant: false
+    },
+    {
+        date: '2015年3月',
+        desc: '湖南省检察院驻三星村建设扶贫工作总结',
+        isImportant: false
+    },
+    {
+        date: '2016年4月',
+        desc: '国开行未来5年提供1.5万亿元融资助力脱贫攻坚',
+        isImportant: false
+    },
+    {
+        date: '2016年6月',
+        desc: '在参与扶贫中实现企业更好发展（治理之道）',
+        isImportant: true
+    },
+    {
         date: '2017年5月',
-        desc: '百度与佰仟租赁等联合发行国内首单区块链技术支持的ABS项目',
+        desc: '国机集团职教扶贫擎起贫困孩子的明天 ',
         isImportant: false
     },
     {
-        date: '2018年3月',
-        desc: '区块链版权平台上线',
+        date: '2017年5月',
+        desc: '“互联网＋”开辟精准扶贫新道路 ',
         isImportant: false
     },
     {
-        date: '2018年8月',
-        desc: '度链网络科技（海南）有限公司成立',
-        isImportant: false
-    },
-    {
-        date: '2018年9月',
-        desc: '《百度区块链区块链白皮书V1.0》发布',
-        isImportant: false
-    },
-    {
-        date: '2018年10月',
-        desc: '海南省人民政府&amp;百度签订合作战略协议',
-        isImportant: false
-    },
-    {
-        date: '2018年12月',
-        desc: '与北京互联网法院共建区块链司法系统“天平链”',
-        isImportant: false
-    },
-    {
-        date: '2019年3月',
-        desc: '数据协同解决方案XuperData发布',
-        isImportant: false
-    },
-    {
-        date: '2019年4月',
-        desc: '获得首批区块链信息服务获得首批备案',
-        isImportant: false
-    },
-    {
-        date: '2019年5月',
-        desc: 'XuperChain技术正式宣布开源',
-        isImportant: false
+        date: '2018年5月',
+        desc: '财政部及早安排拨付2018年中央财政专项扶贫资金1060.95亿元 ',
+        isImportant: true
     },
     {
         date: '2019年6月',
-        desc: '智慧城市项目入选全国“双创周”颠覆性创新榜TOP10',
+        desc: '促进残疾人就业 扶贫路上一个都不落 ',
         isImportant: true
     },
     {
         date: '2019年7月',
-        desc: '通过工信部国家工业信息安全发展研究中心安全性、性能测评',
+        desc: '促进残疾人就业 扶贫路上一个都不落 ',
         isImportant: true
-    },
-    {
-        date: '2019年8月',
-        desc: '宣布与重庆市达成区块链医疗处方流转平台合作',
-        isImportant: false
     },
     {
         date: '2019年9月',
@@ -372,8 +372,13 @@ export const courseData = [
         isImportant: false
     },
     {
-        date: '2019年12月',
-        desc: '通过工信部电子四所安全性、性能测评；作为中国唯一企业代表出席WTO区块链论坛',
+        date: '2020年3月',
+        desc: '2月底易地扶贫搬迁建设任务已基本完成',
+        isImportant: true
+    },
+    {
+        date: '2020年7月',
+        desc: '住房和城乡建设部召开大别山片区脱贫攻坚视频推进会 ',
         isImportant: true
     }
 ];
