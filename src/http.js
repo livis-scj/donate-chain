@@ -9,8 +9,6 @@ import {Notification} from 'element-ui';
 
 // 请求拦截
 axios.interceptors.request.use(config => {
-    let token = localStorage.getItem('donateToken');
-    config.headers['X-TOKEN'] = token;
     return config;
 }, error => Promise.reject(error));
 

@@ -26,12 +26,31 @@ export const getActivityDetail = id => axios.get(`/api/activity/detail/${id}`);
 // 创建活动
 export const submitActivity = data => axios.post('/api/activity/create', data);
 // 调拨
-export const allocation = id => axios.post(`/api/allocation/execute/${id}`);
+export const allocation = (id, token) => axios({
+    method: 'POST',
+    url: `/api/allocation/execute/${id}`,
+    headers: {
+        'X-TOKEN': token
+    }
+});
 // 分发
-export const submitAssign = data => axios.post('/api/assign/assign', data);
+export const submitAssign = (data, token) => axios({
+    method: 'POST',
+    url: '/api/assign/assign',
+    headers: {
+        'X-TOKEN': token
+    },
+    data
+});
 // 获取追溯详情
 export const getDonateTrace = params => axios.get('/api/donate/queryByDonorCertCode', {params});
 // 受捐人登录
 export const receiveLogin = data => axios.post('/api/donatory/login', data);
 // 获取库存余额
-export const getDonateStock = data => axios.post('/api/admin/donate/balance', data);
+export const getDonateStock = token => axios({
+    method: 'POST',
+    url: '/api/admin/donate/balance',
+    headers: {
+        'X-TOKEN': token
+    }
+});

@@ -68,7 +68,7 @@
               </el-form-item>
               <el-form-item label="捐赠人" prop="donorId" required v-if="$store.getters.userInfo.userId === 9900000">
                   <div style="display:flex">
-                      <el-select filterable style="width:calc(100% - 8px)" v-model="form.donorId" placeholder="请选择捐赠人">
+                      <el-select filterable style="width:calc(100% - 8px)" v-model="form.donorId" @change="handleChange" placeholder="请选择捐赠人">
                           <el-option
                             v-for="item in options"
                             :key="item.value"
@@ -76,7 +76,7 @@
                             :value="item.value">
                           </el-option>
                       </el-select>
-                      <el-button @click="innerVisible = true" size="medium">新增捐赠人</el-button>
+                      <el-button type="primary" @click="innerVisible = true" size="medium">新增捐赠人</el-button>
                   </div>
               </el-form-item>
               <el-form-item
@@ -111,11 +111,14 @@
               </el-form-item>
           </el-form>
       </el-dialog>
-      <el-dialog top="8vh" custom-class="donate" :visible.sync="successDialog">
+      <el-dialog top="8vh" width="50%" custom-class="donate" :visible.sync="successDialog">
           <div class="certificate">
-              <div class="header">扶贫捐赠</div>
-              <h1>捐赠证书</h1>
-              <div class="desc"></div>
+              <div class="header">捐赠证书</div>
+              <h1>尊敬的 爱心人士：</h1>
+              <div class="desc">感谢您对于贫困人员捐出的<span style="color:orange">{{certificateData.money}}元。</span>爱心码为{{certificateData.certificate}}，凭爱心码可以于追溯平台查找查询，请妥善保管。</div>
+              <div class="desc">特颁此证！</div>
+              <div class="enterprise">扶贫捐助信息平台</div>
+              <div class="data">{{timeFormatChinese((new Date()).getTime())}}</div>
           </div>
       </el-dialog>
       <el-drawer
@@ -173,7 +176,7 @@
         :close-on-click-modal="false"
         width="428px"
         center
-        title="注 册"
+        title="新增捐赠人"
         :visible.sync="innerVisible"
         @close="closDialog"
         append-to-body>
@@ -312,7 +315,11 @@ export default {
             drawer: false,
             detailData: [],
             formLabelWidth: '80px',
-            totalMoney: ''
+            totalMoney: '',
+            certificateData: {
+                certificate: '',
+                money: ''
+            }
         };
     },
     created() {
@@ -329,6 +336,9 @@ export default {
         }
     },
     methods: {
+        timeFormatChinese(value) {
+            return moment(value).format('LL');
+        },
         async getDonateData() {
             const {status, data, msg} = await getDonations({
                 pageNo: this.pageNo,
@@ -343,7 +353,8 @@ export default {
             }
         },
         async getStockData() {
-            const {data} = await getDonateStock();
+            let token = localStorage.getItem('donateToken');
+            const {data} = await getDonateStock(token);
             this.totalMoney = data;
         },
         async search() {
@@ -385,9 +396,9 @@ export default {
             const {donorId = null, name, type, unit, quantity, isAnonymous} = this.form;
             this.$refs.form.validate(async valid => {
                 if (valid) {
-                    let {status, msg} = await submitDonate({
+                    let {status, msg, data} = await submitDonate({
                         donorId,
-                        userId: this.$store.getters.userInfo.userId,
+                        loginId: this.$store.getters.userInfo.userId,
                         isAnonymous,
                         details: [
                             {
@@ -402,7 +413,10 @@ export default {
                         this.$message.success('添加成功！');
                         this.$refs.form.resetFields();
                         this.getDonateData();
+                        this.certificateData.money = quantity;
+                        this.certificateData.certificate = data;
                         this.donateDialogVisible = false;
+                        this.successDialog = true;
                     } else {
                         this.$message.error(msg);
                     }
@@ -442,6 +456,9 @@ export default {
                 idcard: '',
                 mobile: ''
             };
+        },
+        handleChange(e) {
+            console.log(e);
         }
     }
 };
@@ -457,11 +474,32 @@ section
 .el-dialog__wrapper
     .donate
         width 1000px
+        el-dialog__header
+            display none
         .certificate
             background url(../../assets/donate.png) no-repeat
             background-size: 100% 100%
-            height 500px
+            height 600px
             position relative
+            top: 50%
+            left: 50%
+            transform: translateX(-50%)
+            .header
+                padding-top 78px
+                text-align center
+                font-size 22px
+                font-weight 700
+            h1
+                padding 0 100px
+            .desc
+                padding 0 100px
+                text-indent 2em
+            .data
+                padding 0px 120px 0
+                text-align right
+            .enterprise
+                padding 20px 100px 0
+                text-align right
 .el-drawer__wrapper
     .detail-drawer
         width 500px

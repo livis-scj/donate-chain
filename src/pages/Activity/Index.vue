@@ -181,7 +181,7 @@
                   </el-row>
                   <el-row class="row-item">
                       <div class="label">活动时间</div>
-                      <div class="value">{{form.startTime}} - {{form.endTime}}</div>
+                      <div class="value">{{timeFormat(form.startTime)}} - {{timeFormat(form.endTime)}}</div>
                   </el-row>
                   <el-row class="row-item">
                       <div class="label">计划配置</div>
@@ -284,6 +284,7 @@ import {
     getDonateStock
 } from '@/API';
 import {timerFormat} from '@/utils';
+import moment from 'moment';
 
 export default {
     name: 'activity',
@@ -404,12 +405,19 @@ export default {
             this.total = data.total;
         },
         async getStockData() {
-            const {data} = await getDonateStock();
+            let token = localStorage.getItem('donateToken');
+            const {data} = await getDonateStock(token);
             this.totalMoney = data;
         },
         handleCurrentChange(val) {
             this.pageNo = val;
             this.getDonateData();
+        },
+        timeFormat(value) {
+            return moment(value).format('YYYY-MM-DD hh:mm:ss');
+        },
+        timeFormatChinese(value) {
+            return moment(value).format('LL');
         },
         async getDonatoryData() {
             const res1 = await getDonatory({level: 1});
@@ -434,7 +442,8 @@ export default {
             this.active--;
         },
         async handleAllocation(id) {
-            const {status, msg} = await allocation(id);
+            let token = localStorage.getItem('donateToken');
+            const {status, msg} = await allocation(id, token);
             if (status === 0) {
                 this.$message.success('调拨成功');
                 this.getActivityData();
@@ -496,11 +505,12 @@ export default {
                     configs: this.assignForm.configs
                 }]
             };
-            let {status, msg} = await submitAssign(requestBody);
+            let token = localStorage.getItem('donateToken');
+            let {status, msg} = await submitAssign(requestBody, token);
             if (status === 0) {
                 this.$message.success('指派成功');
                 this.getActivityData();
-                this.editDialogVisible = false;
+                this.assignDialogVisible = false;
             } else {
                 this.$message.error(msg);
             }
