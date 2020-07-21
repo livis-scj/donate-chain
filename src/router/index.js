@@ -12,8 +12,13 @@ export default new Router({
         },
         {
             path: '/donate/login',
-            name: 'list',
+            name: '/donate/login',
             component: () => import(/* webpackChunkName: "Home" */ '@/pages/Donate/Login.vue')
+        },
+        {
+            path: '/activity/login',
+            name: '/activity/login',
+            component: () => import(/* webpackChunkName: "Home" */ '@/pages/Activity/Login.vue')
         },
         {
             path: '/recive',

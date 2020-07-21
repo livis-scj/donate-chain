@@ -68,7 +68,7 @@
               </el-form-item>
               <el-form-item label="捐赠人" prop="donorId" required v-if="$store.getters.userInfo.userId === 9900000">
                   <div style="display:flex">
-                      <el-select filterable style="width:calc(100% - 8px)" v-model="form.donorId" @change="handleChange" placeholder="请选择捐赠人">
+                      <el-select filterable style="width:calc(100% - 8px)" v-model="form.donorId" placeholder="请选择捐赠人">
                           <el-option
                             v-for="item in options"
                             :key="item.value"
