@@ -5,7 +5,7 @@
               <el-row>
                   <el-col :span="16">
                       <el-form-item label="捐赠人">
-                          <el-select style="width:100%" v-model="searchForm.donorId" placeholder="请选择捐赠人">
+                          <el-select filterable style="width:100%" v-model="searchForm.donorId" placeholder="请选择捐赠人">
                               <el-option
                                 v-for="item in options"
                                 :key="item.value"
@@ -198,8 +198,8 @@
           <el-form-item label="身份证号" :label-width="formLabelWidth" required prop="idcard">
             <el-input placeholder="请输入身份证号" v-model="registerForm.idcard" clearable></el-input>
           </el-form-item>
-          <el-form-item label="手机号" :label-width="formLabelWidth" required prop="mobil">
-            <el-input placeholder="请输入手机号" v-model="registerForm.mobil" clearable></el-input>
+          <el-form-item label="手机号" :label-width="formLabelWidth" required prop="mobile">
+            <el-input placeholder="请输入手机号" v-model="registerForm.mobile" clearable></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

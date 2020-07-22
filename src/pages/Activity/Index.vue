@@ -465,6 +465,9 @@ export default {
                 configs
             } = this.form;
             let quantity = configs.map(item => item.quantity * item.amount).reduce((acc, cur) => acc + cur);
+            let config = configs.filter(item => {
+                return item.amount !== '';
+            });
             let formData = {
                 theme,
                 description: desc,
@@ -478,7 +481,7 @@ export default {
                     name,
                     amount: quantity,
                     needPurchase: 0,
-                    configs
+                    configs: config
                 }]
             };
             let {status, msg} = await submitActivity({...formData});
