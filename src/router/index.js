@@ -48,7 +48,7 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "Home" */ '@/pages/Receive/receive.vue')
                 },
                 {
-                    path: '/activity/index',
+                    path: '/activity/list',
                     name: 'activity',
                     component: () => import(/* webpackChunkName: "Home" */ '@/pages/Activity/Index.vue')
                 }

@@ -415,6 +415,7 @@ export default {
                         this.$message.success('添加成功！');
                         this.$refs.form.resetFields();
                         this.getDonateData();
+                        this.getStockData();
                         this.certificateData = data;
                         this.donateDialogVisible = false;
                         this.successDialog = true;

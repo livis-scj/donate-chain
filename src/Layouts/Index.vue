@@ -9,7 +9,6 @@
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>
                                 <div>{{name}}</div>
-                                <el-button type="text">修改密码</el-button>
                                 <el-button type="text" @click="handleLogout">退出登录</el-button>
                             </el-dropdown-item>
                         </el-dropdown-menu>

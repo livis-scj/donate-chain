@@ -140,7 +140,7 @@ export default {
         handleDetail(row) {
             console.log(row);
             const {token, userId} = getToken(this);
-            axios.post(`/api//draw/draw`, {
+            axios.post(`/api/draw/draw`, {
                 activityId: row.activityId,
                 donatoryId: Number(userId)
             }, {

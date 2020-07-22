@@ -1,5 +1,5 @@
 <template>
-  <div  class="activity-index">
+  <div class="activity-index">
       <section class="table">
           <div style="display:flex;justify-content: space-between;">
               <span style="line-height:40px;font-size:16px">总计捐款：{{totalMoney}}元</span>
@@ -43,7 +43,6 @@
           </el-pagination>
       </section>
       <el-dialog
-          width="60%"
           top="3vh"
           title="添加活动"
           :visible.sync="editDialogVisible">
@@ -106,61 +105,61 @@
           <el-form ref="form" v-if="active === 2" :model="form" label-width="80px">
               <el-row>
                   <el-col :span="4">
-                      <div style="line-height:40px">绝对贫困人口：</div>
+                      <div style="line-height:40px">绝对贫困人群：</div>
                   </el-col>
                   <el-col :span="10">
-                      <el-form-item label="受捐钱数">
-                          <el-input v-model="form.configs[0].quantity"></el-input>
+                      <el-form-item label="受捐金额">
+                          <el-input placeholder="请输入受捐金额" v-model="form.configs[0].quantity"></el-input>
                       </el-form-item>
                   </el-col>
                   <el-col :span="10">
                       <el-form-item label="受捐人数">
-                          <el-input v-model="form.configs[0].amount"></el-input>
+                          <el-input placeholder="请输入受捐人数" v-model="form.configs[0].amount"></el-input>
                       </el-form-item>
                   </el-col>
               </el-row>
               <el-row>
                   <el-col :span="4">
-                      <div style="line-height:40px">相对贫困人口：</div>
+                      <div style="line-height:40px">相对贫困人群：</div>
                   </el-col>
                   <el-col :span="10">
-                      <el-form-item label="受捐钱数">
-                          <el-input v-model="form.configs[1].quantity"></el-input>
+                      <el-form-item label="受捐金额">
+                          <el-input placeholder="请输入受捐金额" v-model="form.configs[1].quantity"></el-input>
                       </el-form-item>
                   </el-col>
                   <el-col :span="10">
                       <el-form-item label="受捐人数">
-                          <el-input v-model="form.configs[1].amount"></el-input>
+                          <el-input placeholder="请输入受捐人数" v-model="form.configs[1].amount"></el-input>
                       </el-form-item>
                   </el-col>
               </el-row>
               <el-row>
                   <el-col :span="4">
-                      <div style="line-height:40px">低收入人口：</div>
+                      <div style="line-height:40px">低收入人群：</div>
                   </el-col>
                   <el-col :span="10">
-                      <el-form-item label="受捐钱数">
-                          <el-input v-model="form.configs[2].quantity"></el-input>
+                      <el-form-item label="受捐金额">
+                          <el-input placeholder="请输入受捐金额" v-model="form.configs[2].quantity"></el-input>
                       </el-form-item>
                   </el-col>
                   <el-col :span="10">
                       <el-form-item label="受捐人数">
-                          <el-input v-model="form.configs[2].amount"></el-input>
+                          <el-input placeholder="请输入受捐人数" v-model="form.configs[2].amount"></el-input>
                       </el-form-item>
                   </el-col>
               </el-row>
               <el-row>
                   <el-col :span="4">
-                      <div style="line-height:40px">一般收入人口：</div>
+                      <div style="line-height:40px">一般收入人群：</div>
                   </el-col>
                   <el-col :span="10">
-                      <el-form-item label="受捐钱数">
-                          <el-input v-model="form.configs[3].quantity"></el-input>
+                      <el-form-item label="受捐金额">
+                          <el-input placeholder="请输入受捐金额" v-model="form.configs[3].quantity"></el-input>
                       </el-form-item>
                   </el-col>
                   <el-col :span="10">
                       <el-form-item label="受捐人数">
-                          <el-input v-model="form.configs[3].amount"></el-input>
+                          <el-input placeholder="请输入受捐人数" v-model="form.configs[3].amount"></el-input>
                       </el-form-item>
                   </el-col>
               </el-row>
@@ -211,19 +210,19 @@
               </div>
               <el-form-item style="text-align:center" label-width="0">
                   <el-button @click="previous">上一步</el-button>
-                  <el-button @click="submit">提交</el-button>
+                  <el-button type="primary" @click="submit">提交</el-button>
               </el-form-item>
           </el-form>
       </el-dialog>
       <el-dialog
-          width="60%"
+          width="40%"
           top="3vh"
           title="分发金额"
           :visible.sync="assignDialogVisible">
               <el-form>
-                  <el-form-item label="绝对贫困人口">
+                  <el-form-item label="绝对贫困人群">
                       {{assignData.plans[0].configs[0].quantity}}元 x {{assignData.plans[0].configs[0].amount}}人
-                      <el-select style="width:100%" multiple v-model="assignForm.configs[0].donatoryIds" :multiple-limit="assignData.plans[0].configs[0].amount" placeholder="请选择受捐人" filterable>
+                      <el-select style="width:90%" multiple v-model="assignForm.configs[0].donatoryIds" :multiple-limit="assignData.plans[0].configs[0].amount" placeholder="请选择受捐人" filterable>
                           <el-option
                             v-for="item in options1"
                             :key="item.value"
@@ -232,9 +231,9 @@
                           </el-option>
                       </el-select>
                   </el-form-item>
-                  <el-form-item label="相对贫困人口">
+                  <el-form-item label="相对贫困人群">
                       {{assignData.plans[0].configs[1].quantity}}元 x {{assignData.plans[0].configs[1].amount}}人
-                      <el-select style="width:100%" multiple v-model="assignForm.configs[1].donatoryIds" :multiple-limit="assignData.plans[0].configs[1].amount" placeholder="请选择受捐人" filterable>
+                      <el-select style="width:90%" multiple v-model="assignForm.configs[1].donatoryIds" :multiple-limit="assignData.plans[0].configs[1].amount" placeholder="请选择受捐人" filterable>
                           <el-option
                             v-for="item in options2"
                             :key="item.value"
@@ -243,9 +242,9 @@
                           </el-option>
                       </el-select>
                   </el-form-item>
-                  <el-form-item label="低收入人口">
+                  <el-form-item label="低收入人群">
                       {{assignData.plans[0].configs[2].quantity}}元 x {{assignData.plans[0].configs[2].amount}}人
-                      <el-select style="width:100%" multiple v-model="assignForm.configs[2].donatoryIds" :multiple-limit="assignData.plans[0].configs[2].amount" placeholder="请选择受捐人" filterable>
+                      <el-select style="width:90%" multiple v-model="assignForm.configs[2].donatoryIds" :multiple-limit="assignData.plans[0].configs[2].amount" placeholder="请选择受捐人" filterable>
                           <el-option
                             v-for="item in options3"
                             :key="item.value"
@@ -254,9 +253,9 @@
                           </el-option>
                       </el-select>
                   </el-form-item>
-                  <el-form-item label="一般收入人口">
+                  <el-form-item label="一般收入人群">
                       {{assignData.plans[0].configs[3].quantity}}元 x {{assignData.plans[0].configs[3].amount}}人
-                      <el-select style="width:100%" multiple v-model="assignForm.configs[3].donatoryIds" :multiple-limit="assignData.plans[0].configs[3].amount" placeholder="请选择受捐人" filterable>
+                      <el-select style="width:90%" multiple v-model="assignForm.configs[3].donatoryIds" :multiple-limit="assignData.plans[0].configs[3].amount" placeholder="请选择受捐人" filterable>
                           <el-option
                             v-for="item in options4"
                             :key="item.value"
@@ -266,7 +265,9 @@
                       </el-select>
                   </el-form-item>
                   <el-form-item>
-                      <el-button @click="handleSubmitAssign">指派</el-button>
+                      <div style="text-align:center">
+                          <el-button type="primary" @click="handleSubmitAssign">指派</el-button>
+                      </div>
                   </el-form-item>
               </el-form>
           </el-dialog>
@@ -465,9 +466,7 @@ export default {
                 configs
             } = this.form;
             let quantity = configs.map(item => item.quantity * item.amount).reduce((acc, cur) => acc + cur);
-            let config = configs.filter(item => {
-                return item.amount !== '';
-            });
+            let config = configs.filter(item => item.amount !== '');
             let formData = {
                 theme,
                 description: desc,

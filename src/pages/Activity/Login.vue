@@ -61,7 +61,7 @@ export default {
                 this.$message.success('登录成功');
                 await this.$store.dispatch('setUserInfo', data);
                 localStorage.setItem('donateToken', data.token);
-                this.$router.push('/activity/index');
+                this.$router.push('/activity/list');
             } else {
                 this.$message.error(msg);
             }
