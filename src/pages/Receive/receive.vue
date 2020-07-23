@@ -153,6 +153,7 @@ export default {
                     this.code = res.data;
                     this.certificateData = row;
                     this.successDialog = true;
+                    this.getReceiveData();
                 } else {
                     this.$message({
                         message: res.msg,
@@ -189,7 +190,6 @@ export default {
         },
         closDialog(dialog) {
             this[dialog] = false;
-            this.getReceiveData();
         }
     }
 };

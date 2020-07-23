@@ -83,13 +83,29 @@
         title="捐赠详情"
         :visible.sync="drawer"
         direction="rtl"
+        @closed="resetDrawer"
         size="61.8%">
         <el-timeline v-if="drawerData">
           <el-timeline-item :timestamp="drawerData.donateTime | dayFormat" placement="top">
             <el-card>
               <h4>捐赠者信息</h4>
               <p><span class="card-label">捐赠者姓名：</span><span class="card-value">{{drawerData.donorName}}</span></p>
-              <p><span class="card-label">捐赠证书：</span><span class="card-value">{{drawerData.certCode}}</span></p>
+              <p>
+                <span class="card-label">捐赠证书：</span><span class="card-value">{{drawerData.certCode}}</span>
+                <el-button type="text" @click="verifydonate(drawerData.certCode, 0)">区块链信息查询</el-button>
+              </p>
+            </el-card>
+          </el-timeline-item>
+          <el-timeline-item :timestamp="donateVerify[0].time | timeFormat" placement="top" v-if="donateVerify[0]">
+            <el-card>
+              <h4>捐赠者信息(区块链)</h4>
+              <p><span class="card-label">捐赠者姓名：</span><span class="card-value">{{donateVerify[0].donorOrDonatoryName}}</span></p>
+              <p><span class="card-label">捐赠者身份证：</span><span class="card-value">{{donateVerify[0].idCard}}</span></p>
+              <h4>捐赠信息(区块链)</h4>
+              <p v-for="(item, index) in donateVerify[0].drawVerificationDetailList" :key="index">
+                <span class="card-label">{{item.name}}：</span><span class="card-value">{{item.quantity}}{{item.unit}}</span>
+              </p>
+              <el-button type="text">链上数据异常反馈</el-button>
             </el-card>
           </el-timeline-item>
           <el-timeline-item :timestamp="drawerData.donateTime | timeFormat" placement="top">
@@ -112,11 +128,26 @@
                 </el-card>
               </el-timeline-item>
               <template  v-for="(donatoryItem, donatoryIndex) in activityItem.drawRecordFlatDetails">
-                <el-timeline-item :timestamp="donatoryItem.drawTime | dayFormat" placement="top"  v-bind:key="'donatory' + donatoryIndex">
+                <el-timeline-item :timestamp="donatoryItem.drawTime | dayFormat" placement="top" v-bind:key="'donatory' + donatoryIndex">
                   <el-card>
                     <h4>受助者信息</h4>
                     <p><span class="card-label">受助者姓名：</span><span class="card-value">{{donatoryItem.donatoryName}}</span></p>
-                    <p><span class="card-label">受助证书：</span><span class="card-value">{{donatoryItem.certCode}}</span></p>
+                    <p>
+                      <span class="card-label">受助证书：</span><span class="card-value">{{donatoryItem.certCode}}</span>
+                      <el-button type="text" @click="verifydraw(donatoryItem.certCode, donatoryIndex)">区块链信息查询</el-button>
+                    </p>
+                  </el-card>
+                </el-timeline-item>
+                <el-timeline-item :timestamp="drawVerify[donatoryIndex].time | timeFormat" placement="top" v-if="drawVerify[donatoryIndex]" v-bind:key="'draw' + donatoryIndex">
+                  <el-card>
+                    <h4>受助者信息(区块链)</h4>
+                    <p><span class="card-label">受助者姓名：</span><span class="card-value">{{drawVerify[donatoryIndex].donorOrDonatoryName}}</span></p>
+                    <p><span class="card-label">受助者身份证：</span><span class="card-value">{{drawVerify[donatoryIndex].idCard}}</span></p>
+                    <h4>受助信息(区块链)</h4>
+                    <p v-for="(item, index) in drawVerify[donatoryIndex].drawVerificationDetailList" :key="index">
+                      <span class="card-label">{{item.name}}：</span><span class="card-value">{{item.quantity}}{{item.unit}}</span>
+                    </p>
+                    <el-button type="text">链上数据异常反馈</el-button>
                   </el-card>
                 </el-timeline-item>
                 <el-timeline-item :timestamp="donatoryItem.drawTime | timeFormat" placement="top"  v-bind:key="'quantity' + donatoryIndex">
@@ -152,9 +183,10 @@
         </el-timeline>
       </el-drawer>
       <el-drawer
-        title="受捐详情"
+        title="受助详情"
         :visible.sync="donatoryDrawer"
         direction="rtl"
+        @closed="resetDrawer"
         size="61.8%">
         <el-timeline v-if="donatoryData">
           <template v-if="donatoryData.activityBriefResp">
@@ -163,9 +195,24 @@
                 <el-card>
                   <h4>捐赠者信息</h4>
                   <p><span class="card-label">捐赠者姓名：</span><span class="card-value">{{donateItem.donorName}}</span></p>
-                  <p><span class="card-label">捐赠证书：</span><span class="card-value">{{donateItem.certCode}}</span></p>
+                  <p>
+                    <span class="card-label">捐赠证书：</span><span class="card-value">{{donateItem.certCode}}</span>
+                    <el-button type="text" @click="verifydonate(donateItem.certCode, donateIndex)">区块链信息查询</el-button>
+                  </p>
                 </el-card>
               </el-timeline-item>
+              <el-timeline-item :timestamp="donateVerify[donateIndex].time | timeFormat" placement="top" v-if="donateVerify[donateIndex]" v-bind:key="'donateVerify' + donateIndex">
+                  <el-card>
+                    <h4>捐赠者信息(区块链)</h4>
+                    <p><span class="card-label">捐赠者姓名：</span><span class="card-value">{{donateVerify[donateIndex].donorOrDonatoryName}}</span></p>
+                    <p><span class="card-label">捐赠者身份证：</span><span class="card-value">{{donateVerify[donateIndex].idCard}}</span></p>
+                    <h4>捐赠信息(区块链)</h4>
+                    <p v-for="(item, index) in donateVerify[donateIndex].drawVerificationDetailList" :key="index">
+                      <span class="card-label">{{item.name}}：</span><span class="card-value">{{item.quantity}}{{item.unit}}</span>
+                    </p>
+                    <el-button type="text">链上数据异常反馈</el-button>
+                  </el-card>
+                </el-timeline-item>
               <el-timeline-item :timestamp="donateItem.donateTime | timeFormat" placement="top"  v-bind:key="'quantity' + donateIndex">
                 <el-card>
                   <h4>捐赠信息</h4>
@@ -185,14 +232,29 @@
           </template>
           <el-timeline-item :timestamp="donatoryData.drawTime | dayFormat" placement="top">
             <el-card>
-              <h4>受捐者信息</h4>
-              <p><span class="card-label">受捐者姓名：</span><span class="card-value">{{donatoryData.donatoryName}}</span></p>
-              <p><span class="card-label">受捐证书：</span><span class="card-value">{{donatoryData.certCode}}</span></p>
+              <h4>受助者信息</h4>
+              <p><span class="card-label">受助者姓名：</span><span class="card-value">{{donatoryData.donatoryName}}</span></p>
+              <p>
+                <span class="card-label">受助证书：</span><span class="card-value">{{donatoryData.certCode}}</span>
+                <el-button type="text" @click="verifydraw(donatoryData.certCode, 0)">区块链信息查询</el-button>
+              </p>
+            </el-card>
+          </el-timeline-item>
+          <el-timeline-item :timestamp="drawVerify[0].time | timeFormat" placement="top" v-if="drawVerify[0]">
+            <el-card>
+              <h4>受助者信息(区块链)</h4>
+              <p><span class="card-label">受助者姓名：</span><span class="card-value">{{drawVerify[0].donorOrDonatoryName}}</span></p>
+              <p><span class="card-label">受助者身份证：</span><span class="card-value">{{drawVerify[0].idCard}}</span></p>
+              <h4>受助信息(区块链)</h4>
+              <p v-for="(item, index) in drawVerify[0].drawVerificationDetailList" :key="index">
+                <span class="card-label">{{item.name}}：</span><span class="card-value">{{item.quantity}}{{item.unit}}</span>
+              </p>
+              <el-button type="text">链上数据异常反馈</el-button>
             </el-card>
           </el-timeline-item>
           <el-timeline-item :timestamp="donatoryData.drawTime | timeFormat" placement="top">
             <el-card>
-              <h4>受捐信息</h4>
+              <h4>受助信息</h4>
               <p v-for="(item, index) in donatoryData.drawDetailResps" :key="index">
                 <span class="card-label">{{item.name}}：</span><span class="card-value">{{item.quantity}}{{item.unit}}</span>
               </p>
@@ -222,7 +284,9 @@ export default {
             pageSize: 10,
             total: 0,
             pageNo: 1,
-            useout: true
+            useout: true,
+            donateVerify: {},
+            drawVerify: {}
         };
     },
     computed: {},
@@ -240,6 +304,50 @@ export default {
         }
     },
     methods: {
+        resetDrawer() {
+            this.drawerData = null;
+            this.donateVerify = {};
+            this.donatoryData = null;
+            this.drawVerify = {};
+        },
+        verifydonate(certCode, donateIndex) {
+            axios.get(`/api/donate/verify?certCode=${certCode}`, {
+                headers: {
+                    'X-token': JSON.stringify(getToken(this).token)
+                }
+            }).then(res => {
+                let donateVerify = this.donateVerify;
+                if (res.data && res.data.pass) {
+                    donateVerify[donateIndex] = res.data;
+                    this.donateVerify = {...donateVerify};
+                } else {
+                    donateVerify[donateIndex] = {
+                        pass: false,
+                        mag: res.msg
+                    };
+                    this.donateVerify = {...donateVerify};
+                }
+            });
+        },
+        verifydraw(certCode, donatoryIndex) {
+            axios.get(`/api/draw/verify?certCode=${certCode}`, {
+                headers: {
+                    'X-token': JSON.stringify(getToken(this).token)
+                }
+            }).then(res => {
+                let drawVerify = this.drawVerify;
+                if (res.data && res.data.pass) {
+                    drawVerify[donatoryIndex] = res.data;
+                    this.drawVerify = {...drawVerify};
+                } else {
+                    drawVerify[donatoryIndex] = {
+                        pass: false,
+                        mag: res.msg
+                    };
+                    this.drawVerify = {...drawVerify};
+                }
+            });
+        },
         indexMethod(index) {
             return index + 1 + (this.pageNo - 1) * this.pageSize;
         },
@@ -252,14 +360,12 @@ export default {
             this.$router.push({name: 'Index'});
         },
         getSearchDetail(row) {
-            console.log(row);
             if (row.participation === '捐赠') {
                 axios.get(`/api/donate/queryByDonorCertCode?certCode=${row.certCode}`, {
                     headers: {
                         'X-token': JSON.stringify(getToken(this).token)
                     }
                 }).then(res => {
-                    console.log(res);
                     this.drawerData = res;
                     this.calculate(res);
                     this.drawer = true;
@@ -270,7 +376,6 @@ export default {
                         'X-token': JSON.stringify(getToken(this).token)
                     }
                 }).then(res => {
-                    console.log(res);
                     this.donatoryData = res.data;
                     this.donatoryDrawer = true;
                 });
@@ -296,8 +401,8 @@ export default {
                         }
                     });
                 });
-                Object.keys(issue).forEach(key => {
-                    if (total[key] && total[key] > issue[key]) {
+                Object.keys(total).forEach(key => {
+                    if (!issue[key] || total[key] > issue[key]) {
                         this.useout = false;
                     }
                 });
@@ -309,7 +414,6 @@ export default {
                     'X-token': JSON.stringify(getToken(this).token)
                 }
             }).then(res => {
-                console.log(res);
                 this.tableData = res.data;
                 this.pageData = this.tableData.slice(0, this.pageSize);
                 this.total = this.tableData.length;
