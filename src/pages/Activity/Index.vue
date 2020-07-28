@@ -494,7 +494,6 @@ export default {
             if (status === 0) {
                 this.$message.success('创建成功');
                 this.getActivityData();
-                this.$refs.form.resetFields();
                 this.editDialogVisible = false;
             } else {
                 this.$message.error(msg);
