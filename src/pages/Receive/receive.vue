@@ -91,13 +91,15 @@ export default {
                     formatter: row => {
                         let text = '';
                         if (row.status === 0) {
-                            text = '待实施';
+                            text = '待拨款';
                         } else if (row.status === 1) {
-                            text = '实施中';
+                            text = '已拨款';
                         } else if (row.status === 2) {
-                            text = '实施完成';
+                            text = '领取中';
                         } else if (row.status === 3) {
-                            text = '活动结束';
+                            text = '领取中';
+                        } else if (row.status === 4) {
+                            text = '活动已结束';
                         }
                         return text;
                     }
