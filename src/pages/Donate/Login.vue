@@ -43,8 +43,8 @@
                         </el-tab-pane>
                     </el-tabs>
                     <div style="text-align:right;margin-bottom:20px;color:#666;font-size:12px">
-                        <span>注册</span>
-                        <span>忘记密码</span>
+                        <el-button type="text" @click="innerVisible = true" >注册</el-button>
+                        <el-button type="text">忘记密码</el-button>
                     </div>
                     <el-form-item>
                         <el-button type="primary" :loading="loading" @click="handleLogin" style="width:100%">登录</el-button>
@@ -53,30 +53,110 @@
             </div>
             <div class="footer"></div>
         </div>
+        <el-dialog
+          :close-on-click-modal="false"
+          width="428px"
+          title="新增捐赠人"
+          :visible.sync="innerVisible"
+          @close="closDialog"
+          append-to-body>
+          <el-form :model="registerForm" ref="registerForm" :rules="registerRules">
+            <el-form-item label="账 号" :label-width="formLabelWidth" required prop="userName">
+              <el-input v-model="registerForm.userName" placeholder="请输入账号" autocomplete="on" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="密 码" :label-width="formLabelWidth" required prop="password">
+              <el-input placeholder="请输入密码" v-model="registerForm.password" show-password clearable></el-input>
+            </el-form-item>
+            <el-form-item label="密 码" :label-width="formLabelWidth" required prop="repassword">
+              <el-input placeholder="请再次输入密码" v-model="registerForm.repassword" show-password clearable></el-input>
+            </el-form-item>
+            <el-form-item label="姓 名" :label-width="formLabelWidth" required prop="name">
+              <el-input placeholder="请输入姓名" v-model="registerForm.name" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="身份证号" :label-width="formLabelWidth" required prop="idcard">
+              <el-input placeholder="请输入身份证号" v-model="registerForm.idcard" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="手机号" :label-width="formLabelWidth" required prop="mobile">
+              <el-input placeholder="请输入手机号" v-model="registerForm.mobile" clearable></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="closDialog" size="medium">取 消</el-button>
+            <el-button type="primary" @click="signIn('registerForm')" :loading="buttonLoading" size="medium">提 交</el-button>
+          </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-import {adminLogin, userLogin} from '@/API';
+import {adminLogin, userLogin, regisetrDonator} from '@/API';
 export default {
     data() {
+        let checkRepassword = (rule, value, callback) => {
+            if (value !== this.registerForm.password) {
+                return callback(new Error('两次输入密码必须相同'));
+            }
+            return callback();
+        };
         return {
             form: {
             },
+            registerForm: {
+                userName: '',
+                password: '',
+                repassword: '',
+                name: '',
+                idcard: '',
+                mobile: ''
+            },
+            formLabelWidth: '80px',
             codeDisabled: false,
+            buttonLoading: false,
             countdown: 60,
             codeMsg: '获取验证码',
             timer: null,
+            innerVisible: false,
             loading: false,
             activeName: 'user',
             rules: {
                 userName: {required: true, message: '请输入用户名', trigger: 'blur'},
                 password: {required: true, message: '请输入密码', trigger: 'blur'},
                 mobile: {required: true, message: '请输入手机号', trigger: 'blur'}
+            },
+            registerRules: {
+                userName: [
+                    { required: true, message: '账号为必填', trigger: 'blur' },
+                    { min: 3, max: 16, message: '账号长度在 3 到 16 个字符', trigger: 'blur' },
+                    { required: true, message: '账号为必填', trigger: 'change' }
+                ],
+                password: [
+                    { min: 3, max: 16, message: '密码长度在 3 到 16 个字符', trigger: 'blur' },
+                    { required: true, message: '密码为必填', trigger: 'blur' },
+                    { required: true, message: '密码为必填', trigger: 'change' }
+                ],
+                repassword: [
+                    { min: 3, max: 16, message: '密码长度在 3 到 16 个字符', trigger: 'blur' },
+                    { required: true, message: '密码为必填', trigger: 'blur' },
+                    { required: true, message: '两次输入密码必须相同', validator: checkRepassword, trigger: 'blur' },
+                    { required: true, message: '密码为必填', trigger: 'change' }
+                ],
+                name: [
+                    { required: true, message: '姓名为必填', trigger: 'blur' },
+                    { required: true, message: '姓名为必填', trigger: 'change' }
+                ],
+                idcard: [
+                    { required: true, message: '身份证号为必填', trigger: 'blur' },
+                    { required: true, message: '身份证号为必填', trigger: 'change' }
+                ],
+                mobile: [
+                    { required: true, message: '手机号为必填', trigger: 'blur' },
+                    { required: true, message: '手机号为必填', trigger: 'change' }
+                ]
             }
         };
     },
     methods: {
+        // 登录
         async handleLogin() {
             this.loading = true;
             let action = this.activeName === 'user' ? userLogin : adminLogin;
@@ -107,6 +187,35 @@ export default {
                     }
                 }
             }, 1000);
+        },
+        // 注册
+        signIn(formName) {
+            this.buttonLoading = true;
+            this.$refs[formName].validate(async valid => {
+                if (valid) {
+                    let {status, msg} = await regisetrDonator({...this.registerForm});
+                    if (status === 0) {
+                        this.$message.success('添加成功！');
+                        this.$refs[formName].resetFields();
+                        this.innerVisible = false;
+                    } else {
+                        this.$message.error(msg);
+                    }
+                }
+                this.buttonLoading = false;
+            });
+        },
+        // 关闭对话框
+        closDialog() {
+            this.innerVisible = false;
+            this.registerForm = {
+                userName: '',
+                password: '',
+                repassword: '',
+                name: '',
+                idcard: '',
+                mobile: ''
+            };
         }
     }
 };

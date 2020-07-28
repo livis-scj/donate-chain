@@ -17,41 +17,35 @@
           <el-table-column
             type="index"
             :index="indexMethod"
-            label="序号"
-            width="60">
+            label="序号">
           </el-table-column>
           <el-table-column
             prop="donateTime"
-            label="日期"
-            width="180">
+            label="日期">
             <template slot-scope="scope">
               <span>{{scope.row.donateTime | timeFormat}}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="donorName"
-            label="姓名"
-            width="90">
+            label="姓名">
           </el-table-column>
           <el-table-column
             prop="participation"
-            label="类型"
-            width="90">
+            label="类型">
           </el-table-column>
           <el-table-column
             prop="phone"
-            label="手机号"
-            width="180">
+            label="手机号">
           </el-table-column>
           <el-table-column
             prop="idCard"
-            label="身份证号"
-            width="180">
+            label="身份证号">
           </el-table-column>
           <el-table-column
             prop="certCode"
-            label="存证地址"
-            width="560">
+            width="200"
+            label="存证地址">
           </el-table-column>
           <el-table-column
             label="物品">
@@ -60,7 +54,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="60"
             label="操作"
             class-name="operate">
             <template slot-scope="scope">
@@ -381,7 +374,7 @@ export default {
                     this.drawer = true;
                 });
             } else {
-                axios.get(`/api/donate/queryByDonatoryCertCode?certCode=${row.certCode}`, {
+                axios.get(`/donate/queryByDonatoryCertCode?certCode=${row.certCode}`, {
                     headers: {
                         'X-token': JSON.stringify(getToken(this).token)
                     }
@@ -512,10 +505,8 @@ export default {
     }
     .footer {
       margin-top: 50px;
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      text-align: center;
+      width: 100%:
       .m-report-foot {
         text-align: center;
         color: #999;

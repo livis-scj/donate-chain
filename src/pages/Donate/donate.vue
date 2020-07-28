@@ -127,6 +127,7 @@
           title="捐赠详情"
           :visible.sync="drawer"
           direction="rtl"
+          custom-class="donate-drawer"
           size="61.8%">
           <el-timeline v-if="detailData" style="max-height: 600px;overflow: scroll;">
               <el-timeline-item :timestamp="detailData.donateTime | dayFormat" placement="top">
@@ -341,6 +342,7 @@ export default {
         timeFormatChinese(value) {
             return moment(value).format('LL');
         },
+        // 获取捐赠数据
         async getDonateData() {
             const {status, data, msg} = await getDonations({
                 pageNo: this.pageNo,
@@ -354,11 +356,13 @@ export default {
                 this.$message.error(msg);
             }
         },
+        // 获取捐赠总金额
         async getStockData() {
             let token = localStorage.getItem('donateToken');
             const {data} = await getDonateStock(token);
             this.totalMoney = data;
         },
+        // 搜索
         async search() {
             const {status, data, msg} = await getDonations({
                 pageNo: this.pageNo,
@@ -372,17 +376,21 @@ export default {
                 this.$message.error(msg);
             }
         },
+        // 重置
         reset() {
             this.getDonateData();
         },
+        // 获取捐赠人数据
         async getDonatorData() {
             const {data} = await getAllDonators();
             this.options = data;
         },
+        // 分页
         handleCurrentChange(val) {
             this.pageNo = val;
             this.getDonateData();
         },
+        // 新增
         handleAdd() {
             this.form = {
                 donorId: '',
@@ -393,6 +401,7 @@ export default {
             };
             this.donateDialogVisible = true;
         },
+        // 提交
         onSubmit() {
             this.loading = true;
             const {donorId = null, type, unit, quantity, isAnonymous} = this.form;
@@ -426,11 +435,13 @@ export default {
                 this.loading = false;
             });
         },
+        // 详情
         async handleDetail(item) {
             const res = await getDonateTrace({certCode: item.certCode});
             this.detailData = res;
             this.drawer = true;
         },
+        // 注册
         signIn(formName) {
             this.buttonLoading = true;
             this.$refs[formName].validate(async valid => {
@@ -448,6 +459,7 @@ export default {
                 this.buttonLoading = false;
             });
         },
+        // 关闭对话框
         closDialog() {
             this.innerVisible = false;
             this.registerForm = {
@@ -463,7 +475,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .donate-list
     section
         background #FFF
@@ -500,10 +512,6 @@ export default {
                 .enterprise
                     padding 20px 100px 0
                     text-align right
-    .el-drawer__wrapper
-        .detail-drawer
-            width 500px
-            .el-drawer__body
-                max-height 500px
-                overflow scroll
+    .donate-drawer
+        outline none
 </style>

@@ -398,6 +398,7 @@ export default {
         }
     },
     methods: {
+        // 获取活动数据
         async getActivityData() {
             const {data} = await getActivity({
                 pageNo: this.pageNo,
@@ -406,6 +407,7 @@ export default {
             this.data = data.dataList;
             this.total = data.total;
         },
+        // 获取捐款金额
         async getStockData() {
             let token = localStorage.getItem('donateToken');
             const {data} = await getDonateStock(token);
@@ -421,6 +423,7 @@ export default {
         timeFormatChinese(value) {
             return moment(value).format('LL');
         },
+        // 获取受捐者
         async getDonatoryData() {
             const res1 = await getDonatory({level: 1});
             const res2 = await getDonatory({level: 2});
@@ -443,6 +446,7 @@ export default {
         previous() {
             this.active--;
         },
+        // 调拨
         async handleAllocation(id) {
             let token = localStorage.getItem('donateToken');
             const {status, msg} = await allocation(id, token);
@@ -453,6 +457,7 @@ export default {
                 this.$message.error(msg);
             }
         },
+        // 提交活动
         async submit() {
             const {
                 theme,
@@ -492,6 +497,7 @@ export default {
                 this.$message.error(msg);
             }
         },
+        // 获取活动详情
         async handleAssign(id) {
             const {data} = await getActivityDetail(id);
             this.activityId = data.id;
