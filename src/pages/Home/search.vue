@@ -70,10 +70,10 @@
             :page-size="pageSize"
             :total="total">
         </el-pagination>
-        <el-footer>
-            <div class="footer"><div class="m-report-foot page">京公网安备案11000002300011号 ©2020 TianYan <a href="" target="_blank">使用天眼前必读</a></div></div>
-        </el-footer>
       </el-main>
+      <el-footer>
+          <div class="footer"><div class="m-report-foot page">京公网安备案11000002300011号 ©2020 TianYan <a href="" target="_blank">使用天眼前必读</a></div></div>
+      </el-footer>
       <el-drawer
         title="捐赠详情"
         :visible.sync="drawer"
@@ -483,7 +483,7 @@ export default {
     max-height: 100%;
     position: absolute;
     top: 60px;
-    bottom: 0;
+    bottom: 60px;
     left: 0;
     right: 0;
     .search-icon {
@@ -506,17 +506,19 @@ export default {
         cursor: pointer;
       }
     }
-    .footer {
-      margin-top: 50px;
+  }
+  .footer {
+    margin-top: 50px;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    .m-report-foot {
       text-align: center;
-      width: 100%:
-      .m-report-foot {
-        text-align: center;
-        color: #999;
-        margin: 20px 0;
-        a {
-            color: #999;
-        }
+      color: #999;
+      margin: 20px 0;
+      a {
+          color: #999;
       }
     }
   }
