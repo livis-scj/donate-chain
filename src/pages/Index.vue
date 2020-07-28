@@ -284,7 +284,6 @@ export default {
       display: inline-block;
       width: calc(100% / 3 - 10px);
       background-color: #fff;
-      border: 1px solid #E4E4E4;
       .list-title {
         margin-top: 16px;
         font-size: 18px;
@@ -300,6 +299,7 @@ export default {
         &::-webkit-scrollbar {
           display: none;
         }
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
         .list-item {
           padding: 0 20px;
           display: flex;
