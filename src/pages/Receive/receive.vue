@@ -169,11 +169,11 @@ export default {
         },
         // 调整时间戳为 2020-07-13 03:04:00 的日期格式
         timeFormat (value) {
-            return moment(value).format('YYYY-MM-DD hh:mm:ss');
+            return moment(value).format('YYYY-MM-DD HH:mm:ss');
         },
         // 调整时间戳为 2020-07-13 的日期格式
         timeFormatChinese (value) {
-            return moment(value).format('LL');
+            return moment(value).format('YYYY-MM-DD HH:mm:ss');
         },
         // 获取活动列表, 包含可领\已领取
         getReceiveData() {

@@ -122,7 +122,7 @@ export default {
     filters: {
         // 调整时间戳为 2020-07-13 03:04:00 的日期格式
         tiemFormat (value) {
-            return moment(value).format('YYYY-MM-DD hh:mm:ss');
+            return moment(value).format('YYYY-MM-DD HH:mm:ss');
         }
     },
     methods: {

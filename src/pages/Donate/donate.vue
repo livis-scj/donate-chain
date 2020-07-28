@@ -26,7 +26,6 @@
       </section>
       <section class="table">
           <div style="display:flex;justify-content: space-between;">
-              <span style="line-height:40px;font-size:16px">总计捐款：{{totalMoney}}元</span>
               <el-button type="primary" @click="handleAdd">新建捐赠</el-button>
           </div>
           <el-table border :data="donateData" style="margin-top:20px">
@@ -91,7 +90,7 @@
                 prop="type"
                 required>
                   <el-select style="width:100%" v-model="form.type" placeholder="请选择捐赠类型">
-                      <el-option label="钱" value="1"></el-option>
+                      <el-option label="人民币" value="1"></el-option>
                       <el-option disabled label="物品" value="2"></el-option>
                   </el-select>
               </el-form-item>
@@ -99,7 +98,7 @@
                 label="捐赠单位"
                 prop="unit"
                 required>
-                  <el-input v-model="form.unit" placeholder="请输入捐赠单位"></el-input>
+                  <el-input v-model="form.unit" disabled placeholder="请输入捐赠单位"></el-input>
               </el-form-item>
               <el-form-item
                 label="捐赠金额"
@@ -129,7 +128,7 @@
           direction="rtl"
           custom-class="donate-drawer"
           size="61.8%">
-          <el-timeline v-if="detailData" style="max-height: 600px;overflow: scroll;">
+          <el-timeline v-if="detailData" style="overflow: scroll;">
               <el-timeline-item :timestamp="detailData.donateTime | dayFormat" placement="top">
                   <el-card>
                       <h4>捐赠者信息</h4>
@@ -332,10 +331,10 @@ export default {
     },
     filters: {
         timeFormat(value) {
-            return moment(value).format('YY-MM-DD hh:mm:ss');
+            return moment(value).format('YYYY-MM-DD HH:mm:ss');
         },
         dayFormat(value) {
-            return moment(value).format('YY-MM-DD');
+            return moment(value).format('YYYY-MM-DD');
         }
     },
     methods: {
@@ -365,7 +364,7 @@ export default {
         // 搜索
         async search() {
             const {status, data, msg} = await getDonations({
-                pageNo: this.pageNo,
+                pageNo: 1,
                 pageSize: this.pageSize,
                 donorId: this.searchForm.donorId
             });
@@ -512,6 +511,13 @@ export default {
                 .enterprise
                     padding 20px 100px 0
                     text-align right
-    .donate-drawer
-        outline none
+.el-drawer {
+  outline: none;
+  .el-drawer__body {
+    overflow: auto;
+  }
+  * {
+    outline: none;
+  }
+}
 </style>

@@ -70,7 +70,9 @@
             :page-size="pageSize"
             :total="total">
         </el-pagination>
-        <div class="footer"><div class="m-report-foot page">京公网安备案11000002300011号 ©2020 TianYan <a href="" target="_blank">使用天眼前必读</a></div></div>
+        <el-footer>
+            <div class="footer"><div class="m-report-foot page">京公网安备案11000002300011号 ©2020 TianYan <a href="" target="_blank">使用天眼前必读</a></div></div>
+        </el-footer>
       </el-main>
       <el-drawer
         title="捐赠详情"
@@ -85,7 +87,7 @@
               <p><span class="card-label">捐赠者姓名：</span><span class="card-value">{{drawerData.donorName}}</span></p>
               <p>
                 <span class="card-label">捐赠证书：</span><span class="card-value">{{drawerData.certCode}}</span>
-                <el-button type="text" @click="verifydonate(drawerData.certCode, 0)">区块链信息查询</el-button>
+                <el-button type="text" @click="verifydonate(drawerData.certCode, 0)">区块链信息校验</el-button>
               </p>
             </el-card>
           </el-timeline-item>
@@ -127,7 +129,7 @@
                     <p><span class="card-label">受助者姓名：</span><span class="card-value">{{donatoryItem.donatoryName}}</span></p>
                     <p>
                       <span class="card-label">受助证书：</span><span class="card-value">{{donatoryItem.certCode}}</span>
-                      <el-button type="text" @click="verifydraw(donatoryItem.certCode, donatoryIndex)">区块链信息查询</el-button>
+                      <el-button type="text" @click="verifydraw(donatoryItem.certCode, donatoryIndex)">区块链信息校验</el-button>
                     </p>
                   </el-card>
                 </el-timeline-item>
@@ -190,7 +192,7 @@
                   <p><span class="card-label">捐赠者姓名：</span><span class="card-value">{{donateItem.donorName}}</span></p>
                   <p>
                     <span class="card-label">捐赠证书：</span><span class="card-value">{{donateItem.certCode}}</span>
-                    <el-button type="text" @click="verifydonate(donateItem.certCode, donateIndex)">区块链信息查询</el-button>
+                    <el-button type="text" @click="verifydonate(donateItem.certCode, donateIndex)">区块链信息校验</el-button>
                   </p>
                 </el-card>
               </el-timeline-item>
@@ -229,7 +231,7 @@
               <p><span class="card-label">受助者姓名：</span><span class="card-value">{{donatoryData.donatoryName}}</span></p>
               <p>
                 <span class="card-label">受助证书：</span><span class="card-value">{{donatoryData.certCode}}</span>
-                <el-button type="text" @click="verifydraw(donatoryData.certCode, 0)">区块链信息查询</el-button>
+                <el-button type="text" @click="verifydraw(donatoryData.certCode, 0)">区块链信息校验</el-button>
               </p>
             </el-card>
           </el-timeline-item>
@@ -292,11 +294,11 @@ export default {
     filters: {
         // 调整时间戳为 2020-07-13 03:04:00 的日期格式
         timeFormat (value) {
-            return moment(value).format('YYYY-MM-DD hh:mm:ss');
+            return moment(value).format('YYYY-MM-DD HH:mm:ss');
         },
         // 调整时间戳为 2020-07-13 的日期格式
         dayFormat (value) {
-            return moment(value).format('YY-MM-DD');
+            return moment(value).format('YYYY-MM-DD');
         }
     },
     methods: {
@@ -478,6 +480,7 @@ export default {
     color: #333;
     text-align: center;
     line-height: 100%;
+    max-height: 100%;
     position: absolute;
     top: 60px;
     bottom: 0;

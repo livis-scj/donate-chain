@@ -9,18 +9,13 @@
             </div>
             <div class="main">
                 <el-form ref="form" :model="form" :rules="rules">
-                    <el-tabs v-model="activeName">
-                        <el-tab-pane label="用户登录" name="user">
-                            <el-form-item prop="userName" required>
-                                <el-input  prefix-icon="el-icon-user" v-model="form.userName" placeholder="请输入用户名"></el-input>
-                            </el-form-item>
-                            <el-form-item prop="password" required>
-                                <el-input @keyup.enter.native="handleLogin"  prefix-icon="el-icon-lock" show-password v-model="form.password" placeholder="请输入密码"></el-input>
-                            </el-form-item>
-                        </el-tab-pane>
-                    </el-tabs>
+                    <el-form-item prop="userName" required>
+                        <el-input  prefix-icon="el-icon-user" v-model="form.userName" placeholder="请输入用户名"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="password" required>
+                        <el-input @keyup.enter.native="handleLogin"  prefix-icon="el-icon-lock" show-password v-model="form.password" placeholder="请输入密码"></el-input>
+                    </el-form-item>
                     <div style="text-align:right;margin-bottom:20px;color:#666;font-size:12px">
-                        <span>注册</span>
                         <span>忘记密码</span>
                     </div>
                     <el-form-item>

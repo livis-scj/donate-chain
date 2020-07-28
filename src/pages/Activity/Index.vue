@@ -87,7 +87,7 @@
               </el-form-item>
               <el-form-item label="物资类别">
                   <el-select v-model="form.type" style="width:100%" placeholder="请选择物资类别">
-                      <el-option label="钱" value="1"></el-option>
+                      <el-option label="人民币" value="1"></el-option>
                       <el-option label="物" disabled value="2"></el-option>
                   </el-select>
               </el-form-item>
@@ -95,7 +95,7 @@
                   <el-input v-model="form.description" placeholder="请输入计划描述"></el-input>
               </el-form-item>
               <el-form-item label="单位">
-                  <el-input v-model="form.unit" placeholder="请输入单位"></el-input>
+                  <el-input disabled v-model="form.unit" placeholder="请输入单位"></el-input>
               </el-form-item>
               <el-form-item style="text-align:center" label-width="0">
                   <el-button @click="previous">上一步</el-button>
@@ -210,7 +210,7 @@
               </div>
               <el-form-item style="text-align:center" label-width="0">
                   <el-button @click="previous">上一步</el-button>
-                  <el-button type="primary" @click="submit">提交</el-button>
+                  <el-button type="primary" :loading="activityloading" @click="submit">提交</el-button>
               </el-form-item>
           </el-form>
       </el-dialog>
@@ -314,6 +314,7 @@ export default {
             editDialogVisible: false,
             detailDialogVisible: false,
             assignDialogVisible: false,
+            activityloading: false,
             total: 0,
             pageSize: 10,
             pageNo: 1,
@@ -418,7 +419,7 @@ export default {
             this.getDonateData();
         },
         timeFormat(value) {
-            return moment(value).format('YYYY-MM-DD hh:mm:ss');
+            return moment(value).format('YYYY-MM-DD HH:mm:ss');
         },
         timeFormatChinese(value) {
             return moment(value).format('LL');
@@ -459,6 +460,7 @@ export default {
         },
         // 提交活动
         async submit() {
+            this.activityloading = true;
             const {
                 theme,
                 desc,
@@ -496,6 +498,7 @@ export default {
             } else {
                 this.$message.error(msg);
             }
+            this.activityloading = false;
         },
         // 获取活动详情
         async handleAssign(id) {
