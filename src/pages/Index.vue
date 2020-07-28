@@ -112,6 +112,7 @@ export default {
         if (this.first) {
             this.initDate();
         }
+        this.courseData = this.courseData.reverse();
         this.allAutoScroll();
         this.initEcharts();
         this.setTimeoutId = setTimeout(() => {
@@ -119,11 +120,13 @@ export default {
         }, SETTIMEOUTTIME);
     },
     filters: {
+        // 调整时间戳为 2020-07-13 03:04:00 的日期格式
         tiemFormat (value) {
             return moment(value).format('YYYY-MM-DD hh:mm:ss');
         }
     },
     methods: {
+        // 初始化图表
         initEcharts() {
             console.log(echarts);
             var myChart = echarts.init(document.getElementById('echarts'));
@@ -158,11 +161,13 @@ export default {
                 }]
             });
         },
+        // 初始化捐赠排名/贫困群众
         initDate() {
             this.donateRank.push(...this.donateRank.slice(0, 5));
             this.poorPeople.push(...this.poorPeople.slice(0, 5));
             this.first = false;
         },
+        // 列表滚动
         allAutoScroll() {
             const rank = document.querySelector('.auto-scroll .rank');
             const poorPeople = document.querySelector('.auto-scroll .poor-people');
@@ -171,6 +176,7 @@ export default {
             this.elementAutoScroll(poorPeople);
             this.elementAutoScroll(donors);
         },
+        // 控制滚动速率
         elementAutoScroll(ele) {
             setTimeout(() => {
                 if (ele.scrollHeight) {
@@ -184,6 +190,7 @@ export default {
                 }
             }, 50);
         },
+        // 获取最新捐赠信息
         getDynamicDonate () {
             axios.get('/api/donate/allDonations', {pageNo: 1, pageSize: 20}, {
                 headers: {
@@ -195,6 +202,7 @@ export default {
                 this.donatePeple = dataList;
             });
         },
+        // 跳转搜索页并搜索
         search () {
             this.$router.push({name: 'Search', params: {query: this.input}});
         }

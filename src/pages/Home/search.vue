@@ -291,25 +291,30 @@ export default {
     },
     computed: {},
     mounted () {
+        // 获取首页传递的参数,进行搜索
         const query = this.$route.params.query || '';
         this.input = query;
         this.searchForList(query);
     },
     filters: {
+        // 调整时间戳为 2020-07-13 03:04:00 的日期格式
         timeFormat (value) {
             return moment(value).format('YYYY-MM-DD hh:mm:ss');
         },
+        // 调整时间戳为 2020-07-13 的日期格式
         dayFormat (value) {
             return moment(value).format('YY-MM-DD');
         }
     },
     methods: {
+        // 重置查看详情数据
         resetDrawer() {
             this.drawerData = null;
             this.donateVerify = {};
             this.donatoryData = null;
             this.drawVerify = {};
         },
+        // 查看详情内校验捐赠链上信息
         verifydonate(certCode, donateIndex) {
             axios.get(`/api/donate/verify?certCode=${certCode}`, {
                 headers: {
@@ -329,6 +334,7 @@ export default {
                 }
             });
         },
+        // 校验查看详情受捐链上信息
         verifydraw(certCode, donatoryIndex) {
             axios.get(`/api/draw/verify?certCode=${certCode}`, {
                 headers: {
@@ -348,17 +354,21 @@ export default {
                 }
             });
         },
+        // 根据页数调整序号
         indexMethod(index) {
             return index + 1 + (this.pageNo - 1) * this.pageSize;
         },
+        // 切换页数
         handleCurrentChange(val) {
             this.pageNo = val;
             const pageSize = this.pageSize;
             this.pageData = this.tableData.slice((val - 1) * pageSize, val * pageSize);
         },
+        // 回到首页
         backIndex() {
             this.$router.push({name: 'Index'});
         },
+        // 根据类型 participation 获取捐赠详情或受捐详情
         getSearchDetail(row) {
             if (row.participation === '捐赠') {
                 axios.get(`/api/donate/queryByDonorCertCode?certCode=${row.certCode}`, {
@@ -381,6 +391,7 @@ export default {
                 });
             }
         },
+        // 计算捐赠状态,展示详情内是发放中还是发放完毕
         calculate(data) {
             const total = {};
             data.donateDetailResp.forEach(item => {
@@ -408,6 +419,7 @@ export default {
                 });
             }
         },
+        // 获取捐赠/受捐列表
         searchForList(query) {
             axios.get(`/api/donate/genericSearch?query=${query}`, {
                 headers: {
@@ -419,9 +431,11 @@ export default {
                 this.total = this.tableData.length;
             });
         },
+        // 打开查看详情
         openDrawer(row) {
             this.getSearchDetail(row);
         },
+        // 根据类型添加不同样式
         tableRowClassName({row, rowIndex}) {
             if (row.type === '捐赠') {
                 return 'warning-row';
@@ -429,6 +443,7 @@ export default {
                 return 'success-row';
             }
         },
+        // 查找并重置页数
         search () {
             this.searchForList(this.input);
             this.pageNo = 1;

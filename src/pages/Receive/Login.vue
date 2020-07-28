@@ -90,6 +90,7 @@ export default {
         this.signInPersistence();
     },
     methods: {
+        // 若已经登录,直接跳转领取详情页
         signInPersistence() {
             const {token = ''} = getToken(this);
 
@@ -97,6 +98,7 @@ export default {
                 this.$router.push('/receive/list');
             }
         },
+        // 登录
         async handleLogin() {
             this.loading = true;
             let form = {};

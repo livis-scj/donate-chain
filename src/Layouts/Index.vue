@@ -46,6 +46,7 @@ export default {
         this.name = getToken(this).name;
     },
     methods: {
+        // 根据路径初始化页面
         initHeader() {
             const {account} = getToken(this);
             const cookiePath = getPath();
@@ -56,6 +57,7 @@ export default {
                 this.platname = '扶贫捐助信息平台';
             }
         },
+        // 登出,根据路径跳往不同页面
         handleLogout() {
             this.$message.success('登出成功');
             const cookiePath = getPath();
