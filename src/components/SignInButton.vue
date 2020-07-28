@@ -212,7 +212,7 @@ export default {
                                 this.token = res.data.token;
                                 this.account = this.form.userName;
                                 const cookiePath = getPath();
-                                this.$cookies.set(`${cookiePath.slice(1)}token`, `${data.userName} ${data.token} ${data.userId} ${data.name}, '1d', '/');
+                                this.$cookies.set(`${cookiePath.slice(1)}token`, `${data.userName} ${data.token} ${data.userId} ${data.name}`, '1d', '/');
                                 this.closDialog('signInForm');
                             } else {
                                 this.$message({
