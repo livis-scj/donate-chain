@@ -17,7 +17,7 @@
               <el-table-column label="操作">
                   <template slot-scope="scope">
                       <el-button type="text" :disabled="scope.row.drawStatus === 1" @click="handleDetail(scope.row)">领取</el-button>
-                      <el-button type="text" style="margin-left: 0;" :disabled="scope.row.drawStatus !== 1" @click="openDialog()">查看</el-button>
+                      <el-button type="text" style="margin-left: 0;" :disabled="scope.row.drawStatus !== 1" @click="openDialog(scope.row)">查看</el-button>
                   </template>
               </el-table-column>
           </el-table>
@@ -166,7 +166,8 @@ export default {
             });
         },
         // 打开领取成功证书
-        openDialog() {
+        openDialog(row) {
+            this.certificateData = row;
             this.successDialog = true;
         },
         // 调整时间戳为 2020-07-13 03:04:00 的日期格式
