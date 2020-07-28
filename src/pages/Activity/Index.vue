@@ -2,7 +2,7 @@
   <div class="activity-index">
       <section class="table">
           <div style="display:flex;justify-content: space-between;">
-              <span style="line-height:40px;font-size:16px">总计捐款：{{totalMoney}}元</span>
+              <span style="line-height:40px;font-size:16px">捐款余额：{{totalMoney}}元</span>
               <el-button type="primary" @click="handleAdd">新建活动</el-button>
           </div>
           <el-table border style="margin-top:20px" :data="data">
@@ -57,7 +57,7 @@
                   <el-input v-model="form.theme" placeholder="请输入活动主题"></el-input>
               </el-form-item>
               <el-form-item label="活动描述">
-                  <el-input v-model="form.desc" placeholder="请输入活动描述"></el-input>
+                  <el-input type="textarea" v-model="form.desc" placeholder="请输入活动描述"></el-input>
               </el-form-item>
               <el-form-item label="活动开始时间">
                   <el-date-picker
@@ -92,7 +92,7 @@
                   </el-select>
               </el-form-item>
               <el-form-item label="计划描述">
-                  <el-input v-model="form.description" placeholder="请输入计划描述"></el-input>
+                  <el-input type="textarea" v-model="form.description" placeholder="请输入计划描述"></el-input>
               </el-form-item>
               <el-form-item label="单位">
                   <el-input disabled v-model="form.unit" placeholder="请输入单位"></el-input>
@@ -187,19 +187,19 @@
                       <div class="value">
                           <el-row>
                               <el-col :span="12">绝对贫困人口:</el-col>
-                              <el-col :span="12">{{form.configs[0].quantity}}元 x {{form.configs[0].amount}}人</el-col>
+                              <el-col :span="12">{{form.configs[0].quantity || 0}}元 x {{form.configs[0].amount || 0}}人</el-col>
                           </el-row>
                           <el-row>
                               <el-col :span="12">相对贫困人口:</el-col>
-                              <el-col :span="12">{{form.configs[1].quantity}}元 x {{form.configs[1].amount}}人</el-col>
+                              <el-col :span="12">{{form.configs[1].quantity || 0}}元 x {{form.configs[1].amount || 0}}人</el-col>
                           </el-row>
                           <el-row>
                               <el-col :span="12">低收入人口:</el-col>
-                              <el-col :span="12">{{form.configs[2].quantity}}元 x {{form.configs[2].amount}}人</el-col>
+                              <el-col :span="12">{{form.configs[2].quantity || 0}}元 x {{form.configs[2].amount || 0}}人</el-col>
                           </el-row>
                           <el-row>
                               <el-col :span="12">一般收入人口:</el-col>
-                              <el-col :span="12">{{form.configs[3].quantity}}元 x {{form.configs[3].amount}}人</el-col>
+                              <el-col :span="12">{{form.configs[3].quantity || 0}}元 x {{form.configs[3].amount || 0}}人</el-col>
                           </el-row>
                       </div>
                   </el-row>
@@ -220,7 +220,7 @@
           title="分发金额"
           :visible.sync="assignDialogVisible">
               <el-form>
-                  <el-form-item label="绝对贫困人群">
+                  <el-form-item label="绝对贫困人群" v-if="assignData.plans[0].configs[0]">
                       {{assignData.plans[0].configs[0].quantity}}元 x {{assignData.plans[0].configs[0].amount}}人
                       <el-select style="width:90%" multiple v-model="assignForm.configs[0].donatoryIds" :multiple-limit="assignData.plans[0].configs[0].amount" placeholder="请选择受捐人" filterable>
                           <el-option
@@ -231,7 +231,7 @@
                           </el-option>
                       </el-select>
                   </el-form-item>
-                  <el-form-item label="相对贫困人群">
+                  <el-form-item label="相对贫困人群" v-if="assignData.plans[0].configs[1]">
                       {{assignData.plans[0].configs[1].quantity}}元 x {{assignData.plans[0].configs[1].amount}}人
                       <el-select style="width:90%" multiple v-model="assignForm.configs[1].donatoryIds" :multiple-limit="assignData.plans[0].configs[1].amount" placeholder="请选择受捐人" filterable>
                           <el-option
@@ -242,7 +242,7 @@
                           </el-option>
                       </el-select>
                   </el-form-item>
-                  <el-form-item label="低收入人群">
+                  <el-form-item label="低收入人群" v-if="assignData.plans[0].configs[2]">
                       {{assignData.plans[0].configs[2].quantity}}元 x {{assignData.plans[0].configs[2].amount}}人
                       <el-select style="width:90%" multiple v-model="assignForm.configs[2].donatoryIds" :multiple-limit="assignData.plans[0].configs[2].amount" placeholder="请选择受捐人" filterable>
                           <el-option
@@ -253,7 +253,7 @@
                           </el-option>
                       </el-select>
                   </el-form-item>
-                  <el-form-item label="一般收入人群">
+                  <el-form-item label="一般收入人群" v-if="assignData.plans[0].configs[3]">
                       {{assignData.plans[0].configs[3].quantity}}元 x {{assignData.plans[0].configs[3].amount}}人
                       <el-select style="width:90%" multiple v-model="assignForm.configs[3].donatoryIds" :multiple-limit="assignData.plans[0].configs[3].amount" placeholder="请选择受捐人" filterable>
                           <el-option
@@ -422,7 +422,7 @@ export default {
             return moment(value).format('YYYY-MM-DD HH:mm:ss');
         },
         timeFormatChinese(value) {
-            return moment(value).format('LL');
+            return moment(value).format('YYYY-MM-DD');
         },
         // 获取受捐者
         async getDonatoryData() {
@@ -494,6 +494,7 @@ export default {
             if (status === 0) {
                 this.$message.success('创建成功');
                 this.getActivityData();
+                this.$refs.form.resetFields();
                 this.editDialogVisible = false;
             } else {
                 this.$message.error(msg);

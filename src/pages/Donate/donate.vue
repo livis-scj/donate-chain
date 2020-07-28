@@ -61,8 +61,8 @@
           <el-form ref="form" :rules="rules" :model="form" label-width="100px" label-position="right">
               <el-form-item prop="isAnonymous" label="是否匿名">
                   <el-radio-group v-model="form.isAnonymous">
-                      <el-radio label="0">实名</el-radio>
-                      <el-radio label="1">匿名</el-radio>
+                      <el-radio :label="0">实名</el-radio>
+                      <el-radio :label="1">匿名</el-radio>
                   </el-radio-group>
               </el-form-item>
               <el-form-item label="捐赠人" prop="donorId" required v-if="$store.getters.userInfo.userId === 9900000">
@@ -111,7 +111,7 @@
               </el-form-item>
           </el-form>
       </el-dialog>
-      <el-dialog top="8vh" width="50%" custom-class="donate" :visible.sync="successDialog">
+      <el-dialog top="8vh" width="500px" custom-class="donate" :visible.sync="successDialog">
           <div class="certificate">
               <div class="header">捐赠证书</div>
               <h1>尊敬的 {{certificateData.donorName}} 先生/女士：</h1>
@@ -229,6 +229,7 @@ export default {
                 donorId: '',
                 name: '善款',
                 type: '1',
+                isAnonymous: '0',
                 unit: '元',
                 quantity: ''
             },
@@ -331,7 +332,7 @@ export default {
     },
     filters: {
         timeFormat(value) {
-            return moment(value).format('YYYY-MM-DD HH:mm:ss');
+            return moment(value).format('YYYY-MM-DD');
         },
         dayFormat(value) {
             return moment(value).format('YYYY-MM-DD');
@@ -394,11 +395,12 @@ export default {
             this.form = {
                 donorId: '',
                 name: '',
+                isAnonymous: 0,
                 type: '1',
                 unit: '元',
                 quantity: ''
             };
-            this.donateDialogVisible = true;
+            this.successDialog = true;
         },
         // 提交
         onSubmit() {
