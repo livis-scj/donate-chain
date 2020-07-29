@@ -400,7 +400,7 @@ export default {
                 unit: '元',
                 quantity: ''
             };
-            this.successDialog = true;
+            this.donateDialogVisible = true;
         },
         // 提交
         onSubmit() {
